@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محول الصور إلى PDF - ماسح ضوئي ذكي</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>محول الصور إلى PDF</h1>
+            <p>ماسح ضوئي ذكي يحول هاتفك إلى سكانر محمول</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="action-buttons">
+            <button class="action-btn primary" id="cameraBtn">
+                <i class="fas fa-camera"></i>
+                <span>التقاط صورة</span>
+            </button>
+            <button class="action-btn secondary" id="galleryBtn">
+                <i class="fas fa-images"></i>
+                <span>اختيار من المعرض</span>
+            </button>
+        </div>
+
+        <section class="upload-section">
+            <div class="upload-box" id="uploadBox">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>انقر لالتقاط صورة أو اختيار من المعرض</h3>
+                <p>يدعم JPEG, PNG, WEBP</p>
+                <input type="file" id="imageInput" accept="image/*" multiple hidden>
+            </div>
+        </section>
+
+        <section class="selected-images hidden" id="selectedImagesSection">
+            <h2>الصور المحددة</h2>
+            <div class="images-grid" id="imagesGrid"></div>
+            <div class="selected-actions">
+                <button class="btn" id="reorderBtn"><i class="fas fa-sort"></i>إعادة ترتيب</button>
+                <button class="btn" id="removeAllBtn"><i class="fas fa-trash"></i>حذف الكل</button>
+                <button class="btn primary" id="convertAllBtn"><i class="fas fa-file-pdf"></i>تحويل الجميع إلى PDF</button>
+            </div>
+        </section>
+
+	<!-- قسم خطط الأسعار المضاف -->
+<section class="pricing-section">
+    <h2>خطط الأسعار</h2>
+    <p class="pricing-subtitle">اختر الخطة التي تناسب احتياجاتك</p>
+    
+    <div class="pricing-grid">
+        <div class="pricing-plan">
+            <div class="plan-header">
+                <h3>المجانية</h3>
+                <div class="price">مجاناً</div>
+            </div>
+            <ul class="plan-features">
+                <li><i class="fas fa-check"></i> تحويل 5 صور يومياً</li>
+                <li><i class="fas fa-check"></i> معالجة أساسية للصور</li>
+                <li><i class="fas fa-check"></i> حفظ بدون علامة مائية</li>
+                <li><i class="fas fa-check"></i> دعم أساسي عبر البريد</li>
+                <li><i class="fas fa-times"></i> معالجة متقدمة بالذكاء الاصطناعي</li>
+                <li><i class="fas fa-times"></i> دمج صور متعددة في PDF</li>
+                <li><i class="fas fa-times"></i> إزالة الإعلانات</li>
+            </ul>
+            <button class="btn pricing-btn current-plan">الخطة الحالية</button>
+        </div>
+        
+        <div class="pricing-plan featured">
+            <div class="plan-badge">الأكثر شعبية</div>
+            <div class="plan-header">
+                <h3>المتميزة</h3>
+                <div class="price">$4.99 <span>/شهرياً</span></div>
+            </div>
+            <ul class="plan-features">
+                <li><i class="fas fa-check"></i> تحويل صور غير محدود</li>
+                <li><i class="fas fa-check"></i> معالجة متقدمة بالذكاء الاصطناعي</li>
+                <li><i class="fas fa-check"></i> دمج صور متعددة في PDF</li>
+                <li><i class="fas fa-check"></i> إضافة التوقيع الإلكتروني</li>
+                <li><i class="fas fa-check"></i> خيارات متقدمة لضغط PDF</li>
+                <li><i class="fas fa-check"></i> إزالة الإعلانات</li>
+                <li><i class="fas fa-check"></i> دعم فوري مميز</li>
+            </ul>
+            <button class="btn pricing-btn primary" onclick="window.location.href='paymob.php'">اشترك الآن</button>
+        </div>
+        
+        <div class="pricing-plan">
+            <div class="plan-header">
+                <h3>السنوية</h3>
+                <div class="price">$49.99 <span>/سنوياً</span></div>
+                <div class="discount">توفير 16%</div>
+            </div>
+            <ul class="plan-features">
+                <li><i class="fas fa-check"></i> جميع مميزات الخطة المتميزة</li>
+                <li><i class="fas fa-check"></i> تحديثات مجانية لمدة سنة</li>
+                <li><i class="fas fa-check"></i> تخزين سحابي 5GB</li>
+                <li><i class="fas fa-check"></i> دعم بأولوية عالية</li>
+                <li><i class="fas fa-check"></i> نسخ احتياطي تلقائي</li>
+                <li><i class="fas fa-check"></i> تقارير استخدام متقدمة</li>
+                <li><i class="fas fa-check"></i> وصول مبكر للميزات الجديدة</li>
+            </ul>
+	    <button class="btn pricing-btn secondary" onclick="window.location.href='paymob.php'">اشترك الآن</button>
+        </div>
+    </div>
+    
+    <div class="pricing-footer">
+        <p>جميع الخطط تشمل تحديثات أمنية وميزات أساسية مجانية</p>
+        <a href="terms.html">شروط الاستخدام</a> | 
+        <a href="privacy.html">سياسة الخصوصية</a> | 
+        <a href="refund.html">سياسة الاسترجاع</a>
+    </div>
+</section>
+
+        <section class="features-section">
+            <h2>مميزات التطبيق</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <h3>سريع وسهل</h3>
+                    <p>تحويل الصور إلى PDF في ثوانٍ</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-magic"></i>
+                    <h3>معالجة ذكية</h3>
+                    <p>تحسين الجودة تلقائياً</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-lock"></i>
+                    <h3>حماية البيانات</h3>
+                    <p>تشفير ملفات PDF</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-images"></i>
+                    <h3>معرض الصور</h3>
+                    <p>اختيار صور متعددة من المعرض</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="preview-section hidden" id="previewSection">
+            <h2>معاينة الصورة</h2>
+            <div class="preview-container">
+                <img id="previewImage" src="" alt="معاينة الصورة">
+                <div class="preview-actions">
+                    <button class="btn" id="cropBtn"><i class="fas fa-crop"></i>قص</button>
+                    <button class="btn" id="enhanceBtn"><i class="fas fa-magic"></i>تحسين</button>
+                    <button class="btn" id="rotateBtn"><i class="fas fa-sync"></i>تدوير</button>
+                    <button class="btn primary" id="convertBtn"><i class="fas fa-file-pdf"></i>تحويل إلى PDF</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal hidden" id="cropModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>قص الصورة</h3>
+                <button class="close-btn" id="closeCropModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="crop-container">
+                    <img id="cropImage" src="" alt="صورة للقص">
+                </div>
+                <div class="crop-actions">
+                    <button class="btn" id="cancelCrop">إلغاء</button>
+                    <button class="btn primary" id="applyCrop">تطبيق القص</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2023 محول الصور إلى PDF - جميع الحقوق محفوظة</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/payment.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

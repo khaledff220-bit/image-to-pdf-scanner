@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محول الصور إلى PDF - ماسح ضوئي ذكي</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>محول الصور إلى PDF</h1>
+            <p>ماسح ضوئي ذكي يحول هاتفك إلى سكانر محمول</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- (اختصرت باقي الأقسام اللي مش هتغير) -->
+        <!-- ... upload / preview / features ... -->
+
+        <!-- قسم خطط الأسعار (مُحدّث لعرض الجنيه) -->
+        <section class="pricing-section">
+            <h2>خطط الأسعار</h2>
+            <p class="pricing-subtitle">اختر الخطة التي تناسب احتياجاتك</p>
+
+            <div class="pricing-grid">
+                <div class="pricing-plan">
+                    <div class="plan-header">
+                        <h3>المجانية</h3>
+                        <div class="price">مجاناً</div>
+                    </div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> تحويل 5 صور يومياً</li>
+                        <li><i class="fas fa-check"></i> معالجة أساسية للصور</li>
+                    </ul>
+                    <button class="btn pricing-btn current-plan">الخطة الحالية</button>
+                </div>
+
+                <div class="pricing-plan featured">
+                    <div class="plan-badge">الأكثر شعبية</div>
+                    <div class="plan-header">
+                        <h3>المتميزة</h3>
+                        <div class="price">100 <span>جنيه</span></div>
+                    </div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> تحويل صور غير محدود</li>
+                    </ul>
+                    <!-- زر الدفع بالمحفظة (فودافون كاش) -->
+                    <button class="btn pricing-btn primary" id="premiumWalletBtn">اشترك الآن (100 ج - محفظة)</button>
+                    <!-- رابط للدفع بالفيزا -->
+                    <a class="btn" id="premiumCardLink" href="paymob_card.php?plan=monthly" style="display:inline-block; margin-top:8px;">ادفع بالفيزا (100 ج)</a>
+                </div>
+
+                <div class="pricing-plan">
+                    <div class="plan-header">
+                        <h3>السنوية</h3>
+                        <div class="price">500 <span>جنيه</span></div>
+                        <div class="discount">توفير 16%</div>
+                    </div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> جميع مميزات الخطة المتميزة</li>
+                    </ul>
+                    <button class="btn pricing-btn secondary" id="annualWalletBtn">اشترك سنوياً (500 ج - محفظة)</button>
+                    <a class="btn" id="annualCardLink" href="paymob_card.php?plan=annual" style="display:inline-block; margin-top:8px;">ادفع بالفيزا (500 ج)</a>
+                </div>
+            </div>
+
+            <div class="pricing-footer">
+                <p>جميع الخطط تشمل تحديثات أمنية وميزات أساسية مجانية</p>
+            </div>
+        </section>
+
+        <!-- بقية الصفحة -->
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 محول الصور إلى PDF - جميع الحقوق محفوظة</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
