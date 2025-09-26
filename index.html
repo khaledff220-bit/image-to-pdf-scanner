@@ -16,15 +16,37 @@
     </header>
 
     <main class="container">
-        <!-- (اختصرت باقي الأقسام اللي مش هتغير) -->
-        <!-- ... upload / preview / features ... -->
+        <!-- قسم رفع الصور -->
+        <section class="upload-section">
+            <h2>ارفع صورك</h2>
+            <input type="file" id="fileUpload" multiple accept="image/*">
+            <button class="btn" id="uploadBtn">رفع الصور</button>
+        </section>
 
-        <!-- قسم خطط الأسعار (مُحدّث لعرض الجنيه) -->
+        <!-- قسم معاينة الصور -->
+        <section class="preview-section">
+            <h2>معاينة الصور</h2>
+            <div id="previewContainer"></div>
+            <button class="btn" id="convertBtn">تحويل إلى PDF</button>
+        </section>
+
+        <!-- قسم المميزات -->
+        <section class="features-section">
+            <h2>مميزات التطبيق</h2>
+            <ul>
+                <li><i class="fas fa-check"></i> تحويل الصور إلى PDF بسهولة</li>
+                <li><i class="fas fa-check"></i> واجهة سهلة الاستخدام</li>
+                <li><i class="fas fa-check"></i> دعم متعدد للصور</li>
+            </ul>
+        </section>
+
+        <!-- قسم خطط الأسعار -->
         <section class="pricing-section">
             <h2>خطط الأسعار</h2>
             <p class="pricing-subtitle">اختر الخطة التي تناسب احتياجاتك</p>
 
             <div class="pricing-grid">
+                <!-- الخطة المجانية -->
                 <div class="pricing-plan">
                     <div class="plan-header">
                         <h3>المجانية</h3>
@@ -37,6 +59,7 @@
                     <button class="btn pricing-btn current-plan">الخطة الحالية</button>
                 </div>
 
+                <!-- الخطة الشهرية المتميزة -->
                 <div class="pricing-plan featured">
                     <div class="plan-badge">الأكثر شعبية</div>
                     <div class="plan-header">
@@ -46,12 +69,11 @@
                     <ul class="plan-features">
                         <li><i class="fas fa-check"></i> تحويل صور غير محدود</li>
                     </ul>
-                    <!-- زر الدفع بالمحفظة (فودافون كاش) -->
                     <button class="btn pricing-btn primary" id="premiumWalletBtn">اشترك الآن (100 ج - محفظة)</button>
-                    <!-- رابط للدفع بالفيزا -->
                     <a class="btn" id="premiumCardLink" href="paymob_card.php?plan=monthly" style="display:inline-block; margin-top:8px;">ادفع بالفيزا (100 ج)</a>
                 </div>
 
+                <!-- الخطة السنوية -->
                 <div class="pricing-plan">
                     <div class="plan-header">
                         <h3>السنوية</h3>
@@ -70,8 +92,6 @@
                 <p>جميع الخطط تشمل تحديثات أمنية وميزات أساسية مجانية</p>
             </div>
         </section>
-
-        <!-- بقية الصفحة -->
     </main>
 
     <footer>
