@@ -2,101 +2,108 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محول الصور إلى PDF - ماسح ضوئي ذكي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>محول الصور إلى PDF - مجاني وسريع</title>
+    <meta name="description" content="محول مجاني للصور إلى PDF بجودة عالية. سريع وسهل الاستخدام على جميع الأجهزة.">
+    
+    <!-- تحسين الأداء -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- مكتبة jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>محول الصور إلى PDF</h1>
-            <p>ماسح ضوئي ذكي يحول هاتفك إلى سكانر محمول</p>
-        </div>
-    </header>
-
+    <!-- شريط التحميل -->
+    <div class="loading-bar" id="loadingBar"></div>
     <main class="container">
-        <!-- قسم رفع الصور -->
-        <section class="upload-section">
-            <h2>ارفع صورك</h2>
-            <input type="file" id="fileUpload" multiple accept="image/*">
-            <button class="btn" id="uploadBtn">رفع الصور</button>
-        </section>
-
-        <!-- قسم معاينة الصور -->
-        <section class="preview-section">
-            <h2>معاينة الصور</h2>
-            <div id="previewContainer"></div>
-            <button class="btn" id="convertBtn">تحويل إلى PDF</button>
-        </section>
-
-        <!-- قسم المميزات -->
-        <section class="features-section">
-            <h2>مميزات التطبيق</h2>
-            <ul>
-                <li><i class="fas fa-check"></i> تحويل الصور إلى PDF بسهولة</li>
-                <li><i class="fas fa-check"></i> واجهة سهلة الاستخدام</li>
-                <li><i class="fas fa-check"></i> دعم متعدد للصور</li>
-            </ul>
-        </section>
-
-        <!-- قسم خطط الأسعار -->
-        <section class="pricing-section">
-            <h2>خطط الأسعار</h2>
-            <p class="pricing-subtitle">اختر الخطة التي تناسب احتياجاتك</p>
-
-            <div class="pricing-grid">
-                <!-- الخطة المجانية -->
-                <div class="pricing-plan">
-                    <div class="plan-header">
-                        <h3>المجانية</h3>
-                        <div class="price">مجاناً</div>
-                    </div>
-                    <ul class="plan-features">
-                        <li><i class="fas fa-check"></i> تحويل 5 صور يومياً</li>
-                        <li><i class="fas fa-check"></i> معالجة أساسية للصور</li>
-                    </ul>
-                    <button class="btn pricing-btn current-plan">الخطة الحالية</button>
+        <!-- قسم التحويل الرئيسي -->
+        <section class="converter-section">
+            <div class="converter-card">
+                <h2>ابدأ التحويل الآن</h2>
+                
+                <div class="action-buttons">
+                    <button class="action-btn primary" id="cameraBtn">
+                        <i class="fas fa-camera"></i>
+                        <span>التقاط صورة</span>
+                    </button>
+                    <button class="action-btn secondary" id="galleryBtn">
+                        <i class="fas fa-images"></i>
+                        <span>اختيار من المعرض</span>
+                    </button>
                 </div>
 
-                <!-- الخطة الشهرية المتميزة -->
-                <div class="pricing-plan featured">
-                    <div class="plan-badge">الأكثر شعبية</div>
-                    <div class="plan-header">
-                        <h3>المتميزة</h3>
-                        <div class="price">100 <span>جنيه</span></div>
+                <div class="upload-section">
+                    <div class="upload-box" id="uploadBox">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>انقر لاختيار الصور</h3>
+                        <p>يدعم JPEG, PNG, WEBP</p>
+                        <input type="file" id="imageInput" accept="image/*" multiple hidden>
                     </div>
-                    <ul class="plan-features">
-                        <li><i class="fas fa-check"></i> تحويل صور غير محدود</li>
-                    </ul>
-                    <button class="btn pricing-btn primary" id="premiumWalletBtn">اشترك الآن (100 ج - محفظة)</button>
-                    <a class="btn" id="premiumCardLink" href="paymob_card.php?plan=monthly" style="display:inline-block; margin-top:8px;">ادفع بالفيزا (100 ج)</a>
                 </div>
 
-                <!-- الخطة السنوية -->
-                <div class="pricing-plan">
-                    <div class="plan-header">
-                        <h3>السنوية</h3>
-                        <div class="price">500 <span>جنيه</span></div>
-                        <div class="discount">توفير 16%</div>
+                <!-- الصور المحددة -->
+                <div class="selected-images hidden" id="selectedImagesSection">
+                    <h3>الصور المحددة (<span id="imagesCount">0</span>)</h3>
+                    <div class="images-grid" id="imagesGrid"></div>
+                    <div class="selected-actions">
+                        <button class="btn danger" id="removeAllBtn">
+                            <i class="fas fa-trash"></i>حذف الكل
+                        </button>
+                        <button class="btn primary" id="convertAllBtn">
+                            <i class="fas fa-file-pdf"></i>تحويل الكل إلى PDF
+                        </button>
                     </div>
-                    <ul class="plan-features">
-                        <li><i class="fas fa-check"></i> جميع مميزات الخطة المتميزة</li>
-                    </ul>
-                    <button class="btn pricing-btn secondary" id="annualWalletBtn">اشترك سنوياً (500 ج - محفظة)</button>
-                    <a class="btn" id="annualCardLink" href="paymob_card.php?plan=annual" style="display:inline-block; margin-top:8px;">ادفع بالفيزا (500 ج)</a>
+                </div>
+
+                <!-- المعاينة -->
+                <div class="preview-section hidden" id="previewSection">
+                    <h3>معاينة الصورة</h3>
+                    <div class="preview-container">
+                        <img id="previewImage" src="" alt="معاينة الصورة">
+                        <div class="preview-actions">
+                            <button class="btn" id="rotateBtn">
+                                <i class="fas fa-redo"></i>تدوير
+                            </button>
+                            <button class="btn primary" id="convertBtn">
+                                <i class="fas fa-file-pdf"></i>تحويل إلى PDF
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="pricing-footer">
-                <p>جميع الخطط تشمل تحديثات أمنية وميزات أساسية مجانية</p>
+        <!-- المميزات -->
+        <section class="features-section">
+            <h2>لماذا نتميز؟</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-bolt"></i>
+                    <h3>سريع</h3>
+                    <p>تحويل فوري للصور</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>آمن</h3>
+                    <p>جميع العمليات على جهازك</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>متجاوب</h3>
+                    <p>يعمل على جميع الأجهزة</p>
+                </div>
             </div>
         </section>
     </main>
 
-    <footer>
+    <footer class="main-footer">
         <div class="container">
-            <p>© 2025 محول الصور إلى PDF - جميع الحقوق محفوظة</p>
+            <p>© 2024 محول PDF المجاني. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 
