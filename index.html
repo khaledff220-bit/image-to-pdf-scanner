@@ -3,29 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>محول الصور إلى PDF - مجاني وسريع</title>
-    <meta name="description" content="محول مجاني للصور إلى PDF بجودة عالية. سريع وسهل الاستخدام على جميع الأجهزة.">
+
+    <title>محول صور و PDF إلى Word مجاناً - ماسح JPG و PNG إلى PDF</title>
+    <meta name="description" content="أداة تحويل مجانية وشاملة: حوّل الصور (JPG، PNG) إلى PDF، و ملفات PDF إلى Word (DOCX) بجودة عالية وأمان تام. سريع، مجاني، ومتوافق مع جميع الأجهزة.">
+    <meta name="keywords" content="image to pdf, jpg to pdf converter, pdf to word, convert images to pdf, free pdf scanner, png to pdf, photo to pdf, تحويل صورة إلى pdf, محول jpg إلى pdf, pdf إلى وورد, تحويل pdf الى وورد">
     
-    <!-- تحسين الأداء -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6516738542213361"
+         crossorigin="anonymous"></script>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <link rel="apple-touch-icon" href="/images/icon-192x192.png"> 
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Image & PDF Converter Online",
+      "url": "https://image-to-pdf-scanner.vercel.app/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://image-to-pdf-scanner.vercel.app/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- مكتبة jsPDF -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/pdf-to-word-mockup.js"></script>
 </head>
 <body>
-    <!-- شريط التحميل -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-6516738542213361"
+         data-ad-slot="8064067747"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    
     <div class="loading-bar" id="loadingBar"></div>
     <main class="container">
-        <!-- قسم التحويل الرئيسي -->
         <section class="converter-section">
             <div class="converter-card">
-                <h2>ابدأ التحويل الآن</h2>
-                
+                <h2>تحويل الصور إلى PDF</h2>
                 <div class="action-buttons">
                     <button class="action-btn primary" id="cameraBtn">
                         <i class="fas fa-camera"></i>
@@ -36,7 +64,6 @@
                         <span>اختيار من المعرض</span>
                     </button>
                 </div>
-
                 <div class="upload-section">
                     <div class="upload-box" id="uploadBox">
                         <i class="fas fa-cloud-upload-alt"></i>
@@ -46,7 +73,6 @@
                     </div>
                 </div>
 
-                <!-- الصور المحددة -->
                 <div class="selected-images hidden" id="selectedImagesSection">
                     <h3>الصور المحددة (<span id="imagesCount">0</span>)</h3>
                     <div class="images-grid" id="imagesGrid"></div>
@@ -60,7 +86,6 @@
                     </div>
                 </div>
 
-                <!-- المعاينة -->
                 <div class="preview-section hidden" id="previewSection">
                     <h3>معاينة الصورة</h3>
                     <div class="preview-container">
@@ -78,7 +103,33 @@
             </div>
         </section>
 
-        <!-- المميزات -->
+        <section class="pdf-converter-section">
+            <div class="converter-card secondary-card">
+                <h2>تحويل PDF إلى Word (DOCX)</h2>
+
+                <div class="upload-section">
+                    <div class="upload-box pdf-upload-box" id="pdfUploadBox">
+                        <i class="fas fa-file-pdf"></i>
+                        <h3>انقر لاختيار ملف PDF</h3>
+                        <p>يدعم PDF فقط</p>
+                        <input type="file" id="pdfInput" accept=".pdf" hidden>
+                    </div>
+                </div>
+
+                <div class="pdf-actions hidden" id="pdfActionsSection">
+                    <h3>الملف المحدد: <span id="pdfFileName"></span></h3>
+                    <button class="btn primary" id="convertPdfToWordBtn">
+                        <i class="fas fa-file-word"></i> تحويل إلى Word
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <section class="description-section">
+            <h2>تحويل الصور و PDF إلى ملفات Word مجاناً وأونلاين</h2>
+            <p>أداة **محول الصور إلى PDF** الأسرع والأكثر أماناً. يمكنك تحويل صور **JPG، PNG، و JPEG** إلى ملف PDF بجودة عالية بضغطة زر واحدة. **جديد:** يمكنك الآن تحويل ملفات **PDF إلى Word (DOCX)** بسهولة للحصول على ملفات قابلة للتحرير. جميع العمليات تتم **محلياً على جهازك** لضمان أقصى درجات الخصوصية. **مجاني 100%** ومتوافق تماماً مع الهواتف الذكية والأجهزة اللوحية.</p>
+        </section>
+        
         <section class="features-section">
             <h2>لماذا نتميز؟</h2>
             <div class="features-grid">
