@@ -1,4 +1,4 @@
-// js/script.js - الإصدار الكامل والمصحح (شامل PWA، AdSense، ومنطق التحويل الحقيقي)
+// js/script.js - الإصدار النهائي (شامل PWA، AdSense، وتحويل CloudConvert الحقيقي)
 
 // ===========================================
 // PWA: تسجيل العامل الخدمي (Service Worker)
@@ -23,8 +23,8 @@ let conversionCount = 0;
 const AD_CLIENT = "ca-pub-6516738542213361";
 const AD_SLOT = "8064067747"; 
 
-// 🛑 المفتاح السري لـ CloudConvert API (مهم) 🛑
-const CLOUDCONVERT_API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjU1NTNjNmFlNDhhNDg4NjNkYWQzZDZlMDY1YmEzNTkxYTBkZjc2NTdmNzljNjk5OGMxNWFmZGU2MTEwNzAzMGRiOThiMTIyNDgzYmZjY2MiLCJpYXQiOjE3NjA4NzQwNDQuMDA3OTM5LCJuYmYiOjE3NjA4NzQwNDQuMDA3OTQxLCJleHAiOjQ5MTY1NDc2NDMuOTg5OCwic3ViIjoiNzMyMjg2MjkiLCJzY29wZXMiOlsidGFzay5yZWFkIiwidGFzay53cml0ZSJdfQ.dWhjE_YrgWcYUTvfD9YypDQ9s-FnFovmU2HehcrRRD5mfMeFk4-EdzNgllX1WazEOa-k0YT_3vaaHnBDjDpXqcGwUPBccxLHHOhKATu5LkTxlAYvCcGAtDePc37yGxW71UIYIeY815-OD38dVeMg_7Gvb_AHrNqdAko2Wd3LcoTUKKQyyy0UEwjutr6HjGgvDZjasCDVki3t--xIxbgQQS7oy_rJBSci6CymgHcHBlHSWQmwaZE7ZrSHHgDbrBIJVvyVnwJmECznFNCvxYHiH6HTioLFO6uyKScxbK7sAfijuKifu6UTtFX_OSs2lHxWBf5mjSarbiAqjuneeBmYE1l_JXq-l8dw9LhdtTbP1Y6r1XaVUQI-vt6Ybd0KknfqcldDlbbloLtVptvWldTm-4VgZrc2Zj4lMCM98FM7WxpKCdliCCXMnUVw9mECUBQJ9NNuSxW3phd01g3h-DBWhHVEULUk9xg_MxHz8S7wApYdBrGobfTSuf1t2WCKbjPgfMskC8A-uuwBGPUS6n7Q06jVDePjamfIlK3JKklDrEKrHHEndmQkYvf6WaJsgfI2ultrVlIFtkw35cXsM_lOINact92XDysg1B54qYL-98syiNmPjlTOw9Qw41FJoudUdTnTS_hI6XWaouN1F64Li-MUEMrJ0noVyLcFLTLPukE"; 
+// 🛑 المفتاح السري الجديد لـ CloudConvert API (مهم: تم التحديث هنا) 🛑
+const CLOUDCONVERT_API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiN2VmNzY1NzVlYjRlNTQxNmI5NmQ3ZDMxZDUwYmYyMWUwZTJjMzVhZTc2MDg2NzZhODBmZGUzMWI5MzVjNTNmZmIwYTIwOWQyZDkxNTY5MGYiLCJpYXQiOjE3NjA4NzkwMTEuMjMwMjM3LCJuYmYiOjE3NjA4NzkwMTEuMjMwMjM5LCJleHAiOjQ5MTY1NTI2MTEuMjI3MDQ4LCJzdWIiOiI3MzIyODYyOSIsInNjb3BlcyI6WyJ0YXNrLnJlYWQiLCJ1c2VyLndyaXRlIl19.VGXHZIzWArH_UasESuIdt8qUuYon2ynpDpxFcz8pMFMUc4bovmVM33refehwXLTYsYnb3q7Tw3GzpFFONATELp77fXEbH3gKRIZYn49SjqlO7L59WCYDEvgzt9szYWUOudTg7LU3pmBEHdygodWf2sfpPzZ8cCsOWhuONm_a_j681ctXbSfrfo_4bIWYK7yybSRF5OBPOsHH2JMYY0S651AMLk_8QEhkyO_ba41CVTmFY4Wqc42kbynIZyMUQt1qEWRc6mCgRvEa6az1ekKcQMy9uO0jgTLmhTOFU7gPtPv3cO1H8aTvCkMokWqQsIZ_KrD7zPRqpMqJun6arAbx4aP0w86zXouKaxKYnQpCN24ruv2yDocCY92LrTvFsYh_UYel_Ib02bg5POsDmSwLLu5HMlVCgIFuABJ2vzlhmYuuynqb7-yW8haKmQcA5lBpHUVADpVMZqmSCqG_EQYIHwmIc44-HUh1Y-XT4Il9U59AA_qZiHdnN-HS7FtFPeR4YhnFpY1l5nT8A08GdO1LAiFlxY7MnT7Ox-V8lKWhSI1Vy-IxGPgKI_bh5zpVFCk-1JIQfagYpFn0B0WemVdy__ofn_iArCuYvxHI_261irsokNbPl8LAu0HCMHNAlvW634phruGkGj7XZArwJsBdg7rgLuzUOKaZ_fQidJ1HCTc";
 const CLOUDCONVERT_ENDPOINT = "https://api.cloudconvert.com/v2/jobs";
 
 function showInterstitialAd() {
@@ -372,6 +372,7 @@ class ImageToPDFConverter {
         const jobResponse = await fetch(CLOUDCONVERT_ENDPOINT, {
             method: 'POST',
             headers: {
+                // إرسال مفتاح API في رأس التخويل (Authorization Header)
                 'Authorization': `Bearer ${CLOUDCONVERT_API_KEY}`,
                 'Content-Type': 'application/json'
             },
@@ -394,7 +395,7 @@ class ImageToPDFConverter {
             })
         });
 
-        // 💥 تحسين معالجة الأخطاء 💥 (فشل إنشاء المهمة: مفتاح API أو مشكلة في JSON)
+        // 💥 معالجة خطأ إنشاء المهمة (مثل 401 Unauthorized)
         if (!jobResponse.ok) {
             const errorText = await jobResponse.text();
             this.showNotification(`فشل إنشاء مهمة CloudConvert. (الرمز: ${jobResponse.status})`, 'error');
@@ -419,7 +420,7 @@ class ImageToPDFConverter {
                 body: formData
             });
             
-            // 💥 تحسين معالجة الأخطاء 💥 (فشل الرفع: مشكلة في الاتصال/الصلاحيات)
+            // 💥 معالجة خطأ الرفع
             if (uploadResponse.ok) {
                  return job.data;
             } else {
@@ -477,10 +478,10 @@ class ImageToPDFConverter {
     }
 
     showNotification(message, type) {
-        // يمكن تطويرها لعرض الإشعارات على واجهة المستخدم
         if (type === 'error') {
             console.error(`❌ إشعار خطأ: ${message}`);
-            alert(`خطأ: ${message}`); // إضافة تنبيه (Alert) للمستخدمين على الهاتف
+            // إضافة تنبيه (Alert) للمستخدمين على الهاتف لسهولة التشخيص
+            alert(`خطأ: ${message}`); 
         } else {
             console.log(`💡 إشعار: ${message}`);
         }
