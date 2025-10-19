@@ -101,7 +101,7 @@ class ImageToPDFConverter {
         this.elements.cameraBtn?.addEventListener('click', () => this.openCamera());
         this.elements.galleryBtn?.addEventListener('click', () => this.openGallery());
         this.elements.imageInput?.addEventListener('change', (e) => this.handleImageSelection(e));
-        this.elements.convertBtn?.addEventListener('click', () => this.convertAllToPDF()); // تم توحيدها
+        this.elements.convertBtn?.addEventListener('click', () => this.convertAllToPDF()); 
         this.elements.convertAllBtn?.addEventListener('click', () => this.convertAllToPDF());
         this.elements.removeAllBtn?.addEventListener('click', () => this.removeAllImages());
         this.elements.rotateBtn?.addEventListener('click', () => this.rotateImage());
@@ -140,21 +140,18 @@ class ImageToPDFConverter {
     }
 
     openImagePicker() {
-        // نستخدم هذا لفتح الملفات من الجهاز
         this.elements.imageInput.setAttribute('accept', 'image/*');
         this.elements.imageInput.removeAttribute('capture');
         this.elements.imageInput?.click();
     }
 
     openCamera() {
-        // محاكاة لفتح الكاميرا
         this.elements.imageInput.setAttribute('capture', 'camera');
         this.elements.imageInput.setAttribute('accept', 'image/*');
         this.elements.imageInput?.click();
     }
 
     openGallery() {
-        // فتح المعرض
         this.elements.imageInput.setAttribute('accept', 'image/*');
         this.elements.imageInput.removeAttribute('capture');
         this.elements.imageInput?.click();
@@ -163,7 +160,7 @@ class ImageToPDFConverter {
     handleImageSelection(event) {
         const files = event.target.files;
         this.processImageFiles(files);
-        event.target.value = ''; // مسح قيمة المدخل لمنع التخزين المؤقت
+        event.target.value = ''; 
     }
 
     processImageFiles(files) {
@@ -194,7 +191,7 @@ class ImageToPDFConverter {
 
         if (count > 0) {
             this.elements.selectedImagesSection?.classList.remove('hidden');
-            this.elements.imagesGrid.innerHTML = ''; // مسح القديم
+            this.elements.imagesGrid.innerHTML = ''; 
 
             this.selectedImages.forEach(image => {
                 const item = this.createImageItem(image);
@@ -204,7 +201,6 @@ class ImageToPDFConverter {
             this.elements.selectedImagesSection?.classList.add('hidden');
         }
 
-        // إخفاء المعاينة الفردية (لأنه تم التوحيد على وضع الصور المتعددة)
         this.elements.previewSection?.classList.add('hidden');
     }
 
@@ -237,7 +233,6 @@ class ImageToPDFConverter {
     }
 
     rotateImage() {
-        // هذه الدالة تتطلب المزيد من العمل لتدوير الصورة في الـ Array قبل التحويل
         this.showNotification('ميزة تدوير الصورة قيد التطوير.', 'info');
     }
 
@@ -260,10 +255,8 @@ class ImageToPDFConverter {
             }
 
             const { jsPDF } = window.jspdf;
-            // تعيين الأبعاد على A4 قياسي
             const doc = new jsPDF('p', 'mm', 'a4');
 
-            // دالة مساعدة لتحميل الصورة والحصول على أبعادها
             const loadImage = (src) => new Promise((resolve, reject) => {
                 const img = new Image();
                 img.onload = () => resolve(img);
@@ -271,12 +264,10 @@ class ImageToPDFConverter {
                 img.src = src;
             });
 
-            // تحميل جميع الصور بشكل غير متزامن
             const imagesToProcess = this.selectedImages.map(image => loadImage(image.src));
             const loadedImages = await Promise.all(imagesToProcess);
 
             loadedImages.forEach((img, index) => {
-                // إضافة صفحة جديدة لكل صورة بعد الصورة الأولى
                 if (index > 0) doc.addPage();
 
                 const pdfWidth = doc.internal.pageSize.getWidth();
@@ -285,19 +276,16 @@ class ImageToPDFConverter {
                 const imgWidth = img.width;
                 const imgHeight = img.height;
 
-                // حساب الأبعاد الجديدة لـ احتواء الصورة في الصفحة
                 const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-                const finalWidth = imgWidth * ratio * 0.9; // 90% للحصول على هامش
+                const finalWidth = imgWidth * ratio * 0.9; 
                 const finalHeight = imgHeight * ratio * 0.9;
 
-                // إضافة الصورة إلى PDF في منتصف الصفحة
                 const x = (pdfWidth - finalWidth) / 2;
                 const y = (pdfHeight - finalHeight) / 2;
 
                 doc.addImage(img, 'JPEG', x, y, finalWidth, finalHeight);
             });
 
-            // أمر التنزيل (يجبر التنزيل إلى مجلد Downloads)
             doc.save('ScannerX_Converted.pdf');
 
             this.showNotification(`تم تحويل ${this.selectedImages.length} صورة بنجاح!`, 'success');
@@ -365,7 +353,8 @@ class ImageToPDFConverter {
                     this.showNotification('فشل التحويل. يرجى المحاولة مرة أخرى.', 'error');
                 }
             } else {
-                 this.showNotification('فشل بدء مهمة التحويل على CloudConvert.', 'error');
+                 // إذا فشل startCloudConvertJob سيظهر إشعار الخطأ بداخله
+                 // ونتأكد هنا فقط من مسح الشريط
             }
 
         } catch (error) {
@@ -405,6 +394,14 @@ class ImageToPDFConverter {
             })
         });
 
+        // 💥 تحسين معالجة الأخطاء 💥 (فشل إنشاء المهمة: مفتاح API أو مشكلة في JSON)
+        if (!jobResponse.ok) {
+            const errorText = await jobResponse.text();
+            this.showNotification(`فشل إنشاء مهمة CloudConvert. (الرمز: ${jobResponse.status})`, 'error');
+            console.error("CloudConvert Job Creation Error:", errorText);
+            return null;
+        }
+
         const job = await jobResponse.json();
         
         if (job.data && job.data.id) {
@@ -412,11 +409,9 @@ class ImageToPDFConverter {
             
             // الخطوة 2: رفع الملف فعلياً باستخدام النموذج (FormData)
             const formData = new FormData();
-            // إضافة جميع الباراميترات المطلوبة للرفع
             Object.entries(uploadTask.result.form.parameters).forEach(([key, value]) => {
                 formData.append(key, value);
             });
-            // إضافة الملف الفعلي
             formData.append('file', file);
 
             const uploadResponse = await fetch(uploadTask.result.form.url, {
@@ -424,10 +419,13 @@ class ImageToPDFConverter {
                 body: formData
             });
             
+            // 💥 تحسين معالجة الأخطاء 💥 (فشل الرفع: مشكلة في الاتصال/الصلاحيات)
             if (uploadResponse.ok) {
                  return job.data;
             } else {
-                 console.error("فشل الرفع إلى CloudConvert:", await uploadResponse.text());
+                 const errorText = await uploadResponse.text();
+                 this.showNotification(`فشل رفع الملف إلى CloudConvert. (الرمز: ${uploadResponse.status})`, 'error');
+                 console.error("CloudConvert Upload Error:", errorText);
                  return null;
             }
         }
@@ -437,7 +435,7 @@ class ImageToPDFConverter {
 
     // 🌟 دالة مساعدة: انتظار انتهاء مهمة CloudConvert (Polling)
     async pollJobStatus(jobId) {
-        let maxAttempts = 40; // زيادة المحاولات للتحويلات الطويلة
+        let maxAttempts = 40; 
         let delay = 3000; 
 
         for (let i = 0; i < maxAttempts; i++) {
@@ -482,6 +480,7 @@ class ImageToPDFConverter {
         // يمكن تطويرها لعرض الإشعارات على واجهة المستخدم
         if (type === 'error') {
             console.error(`❌ إشعار خطأ: ${message}`);
+            alert(`خطأ: ${message}`); // إضافة تنبيه (Alert) للمستخدمين على الهاتف
         } else {
             console.log(`💡 إشعار: ${message}`);
         }
@@ -492,7 +491,6 @@ class ImageToPDFConverter {
     }
 
     showLoadingBar() {
-        // محاكاة سريعة لتحميل التطبيق عند التهيئة
         document.getElementById('loadingBar').style.width = '50%';
         setTimeout(() => {
             document.getElementById('loadingBar').style.width = '100%';
