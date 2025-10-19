@@ -1,4 +1,4 @@
-// js/script.js - الإصدار الكامل والمصحح
+// js/script.js - الإصدار الكامل والمصحح (شامل PWA، AdSense، ومنطق التحويل)
 
 // ===========================================
 // PWA: تسجيل العامل الخدمي (Service Worker)
@@ -21,15 +21,17 @@ if ('serviceWorker' in navigator) {
 const INTERSTITIAL_FREQUENCY = 3;
 let conversionCount = 0;
 const AD_CLIENT = "ca-pub-6516738542213361";
-const AD_SLOT = "8064067747";
+// استخدم شفرة الإعلان الخاصة بك هنا إذا كانت مختلفة عن التلقائية
+const AD_SLOT = "8064067747"; 
 
 function showInterstitialAd() {
     conversionCount++;
 
     if (conversionCount % INTERSTITIAL_FREQUENCY === 0) {
-        if (typeof adsbygoogle !== 'undefined' && adsbygoogle.loaded) {
+        if (typeof adsbygoogle !== 'undefined') {
             console.log(`Conversion count: ${conversionCount}. Attempting to show interstitial ad.`);
 
+            // ملاحظة: هذا المنطق مخصص للإعلانات البينية التي تعتمد على حدث (Event-based)
             (adsbygoogle.push({
                 google_ad_client: AD_CLIENT,
                 enable_page_level_ads: true,
@@ -97,7 +99,7 @@ class ImageToPDFConverter {
         this.elements.cameraBtn?.addEventListener('click', () => this.openCamera());
         this.elements.galleryBtn?.addEventListener('click', () => this.openGallery());
         this.elements.imageInput?.addEventListener('change', (e) => this.handleImageSelection(e));
-        this.elements.convertBtn?.addEventListener('click', () => this.convertToPDF());
+        this.elements.convertBtn?.addEventListener('click', () => this.convertAllToPDF()); // تم توحيدها
         this.elements.convertAllBtn?.addEventListener('click', () => this.convertAllToPDF());
         this.elements.removeAllBtn?.addEventListener('click', () => this.removeAllImages());
         this.elements.rotateBtn?.addEventListener('click', () => this.rotateImage());
@@ -109,14 +111,12 @@ class ImageToPDFConverter {
 
         this.initDragAndDrop();
     }
-    
+
     // ===========================================
-    // الدوال الأساسية للصور والمساعدات (التي كانت مفقودة)
+    // الدوال الأساسية للصور والمساعدات
     // ===========================================
 
     initDragAndDrop() {
-        // هذه دالة صور معقدة نسبياً، قد لا تعمل في Termux بسهولة
-        // لكنها ضرورية لتجنب أخطاء "دالة غير معرفة"
         const box = this.elements.uploadBox;
         if (!box) return;
 
@@ -132,23 +132,27 @@ class ImageToPDFConverter {
             this.handleDroppedFiles(dt.files);
         }, false);
     }
-    
+
     handleDroppedFiles(files) {
         this.processImageFiles(files);
     }
 
     openImagePicker() {
+        // نستخدم هذا لفتح الملفات من الجهاز
+        this.elements.imageInput.setAttribute('accept', 'image/*');
+        this.elements.imageInput.removeAttribute('capture');
         this.elements.imageInput?.click();
     }
 
     openCamera() {
-        // محاكاة لفتح الكاميرا، لكنها تتطلب بروتوكول HTTPS للعمل الفعلي
-        this.elements.imageInput.setAttribute('accept', 'image/*');
+        // محاكاة لفتح الكاميرا
         this.elements.imageInput.setAttribute('capture', 'camera');
+        this.elements.imageInput.setAttribute('accept', 'image/*');
         this.elements.imageInput?.click();
     }
 
     openGallery() {
+        // فتح المعرض
         this.elements.imageInput.setAttribute('accept', 'image/*');
         this.elements.imageInput.removeAttribute('capture');
         this.elements.imageInput?.click();
@@ -157,10 +161,9 @@ class ImageToPDFConverter {
     handleImageSelection(event) {
         const files = event.target.files;
         this.processImageFiles(files);
-        // مسح قيمة المدخل لمنع التخزين المؤقت
-        event.target.value = ''; 
+        event.target.value = ''; // مسح قيمة المدخل لمنع التخزين المؤقت
     }
-    
+
     processImageFiles(files) {
         if (!files || files.length === 0) return;
 
@@ -182,7 +185,7 @@ class ImageToPDFConverter {
             }
         });
     }
-    
+
     updateSelectedImagesUI() {
         const count = this.selectedImages.length;
         this.elements.imagesCount.textContent = count;
@@ -190,7 +193,7 @@ class ImageToPDFConverter {
         if (count > 0) {
             this.elements.selectedImagesSection?.classList.remove('hidden');
             this.elements.imagesGrid.innerHTML = ''; // مسح القديم
-            
+
             this.selectedImages.forEach(image => {
                 const item = this.createImageItem(image);
                 this.elements.imagesGrid.appendChild(item);
@@ -198,8 +201,8 @@ class ImageToPDFConverter {
         } else {
             this.elements.selectedImagesSection?.classList.add('hidden');
         }
-        
-        // إخفاء المعاينة الفردية إذا كنا في وضع اختيار متعدد
+
+        // إخفاء المعاينة الفردية (لأنه تم التوحيد على وضع الصور المتعددة)
         this.elements.previewSection?.classList.add('hidden');
     }
 
@@ -211,20 +214,20 @@ class ImageToPDFConverter {
             <img src="${image.src}" alt="${image.name}">
             <span class="remove-btn" data-id="${image.id}"><i class="fas fa-times"></i></span>
         `;
-        
+
         div.querySelector('.remove-btn')?.addEventListener('click', (e) => {
             this.removeSingleImage(image.id);
             e.stopPropagation();
         });
-        
+
         return div;
     }
-    
+
     removeSingleImage(idToRemove) {
         this.selectedImages = this.selectedImages.filter(img => img.id !== idToRemove);
         this.updateSelectedImagesUI();
     }
-    
+
     removeAllImages() {
         this.selectedImages = [];
         this.updateSelectedImagesUI();
@@ -232,58 +235,15 @@ class ImageToPDFConverter {
     }
 
     rotateImage() {
-        if (this.elements.previewImage) {
-            let currentRotation = parseInt(this.elements.previewImage.dataset.rotation || 0);
-            currentRotation = (currentRotation + 90) % 360;
-            this.elements.previewImage.style.transform = `rotate(${currentRotation}deg)`;
-            this.elements.previewImage.dataset.rotation = currentRotation;
-        }
-    }
-    
-    // ===========================================
-    // دوال التحويل والإشعارات (المحدثة)
-    // ===========================================
-
-    convertToPDF() {
-        if (!this.currentImage && this.selectedImages.length === 0) {
-            this.showNotification('يرجى اختيار صورة أولاً', 'error');
-            return;
-        }
-        
-        // إذا كان هناك صور محددة، حولها كلها
-        if (this.selectedImages.length > 0) {
-            this.convertAllToPDF();
-            return;
-        }
-        
-        // في حالة المعاينة الفردية (سيناريو لم نفعله بالكامل، لكن نحافظ عليه)
-        if (!this.currentImage) return;
-
-        this.showLoading('جاري التحويل...');
-
-        setTimeout(() => {
-            try {
-                if (typeof window.jspdf === 'undefined') {
-                    this.showNotification('خطأ في تحميل مكتبة PDF', 'error');
-                    return;
-                }
-
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-
-                doc.addImage(this.currentImage.src, 'JPEG', 10, 10, 190, 0);
-                doc.save('document.pdf');
-
-                this.showNotification('تم التحويل بنجاح! جاري عرض الإعلان...', 'success');
-                showInterstitialAd();
-            } catch (error) {
-                console.error('خطأ في التحويل:', error);
-                this.showNotification('حدث خطأ أثناء التحويل', 'error');
-            }
-        }, 1000);
+        // هذه الدالة تتطلب المزيد من العمل لتدوير الصورة في الـ Array قبل التحويل
+        this.showNotification('ميزة تدوير الصورة قيد التطوير.', 'info');
     }
 
-    convertAllToPDF() {
+    // ===========================================
+    // 🌟 دالة تحويل الصور إلى PDF (المنطق الصحيح) 🌟
+    // ===========================================
+
+    async convertAllToPDF() {
         if (this.selectedImages.length === 0) {
             this.showNotification('يرجى اختيار صورة واحدة على الأقل', 'error');
             return;
@@ -291,35 +251,70 @@ class ImageToPDFConverter {
 
         this.showLoading(`جاري تحويل ${this.selectedImages.length} صورة...`);
 
-        setTimeout(() => {
-            try {
-                if (typeof window.jspdf === 'undefined') {
-                    this.showNotification('خطأ في تحميل مكتبة PDF', 'error');
-                    return;
-                }
-
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-
-                this.selectedImages.forEach((image, index) => {
-                    if (index > 0) doc.addPage();
-                    doc.addImage(image.src, 'JPEG', 10, 10, 190, 0);
-                });
-
-                doc.save('documents.pdf');
-                this.showNotification(`تم تحويل ${this.selectedImages.length} صورة بنجاح! جاري عرض الإعلان...`, 'success');
-                showInterstitialAd();
-                
-                this.removeAllImages(); // مسح الصور بعد التحويل
-
-            } catch (error) {
-                console.error('خطأ في التحويل:', error);
-                this.showNotification('حدث خطأ أثناء التحويل', 'error');
+        try {
+            if (typeof window.jspdf === 'undefined') {
+                this.showNotification('خطأ في تحميل مكتبة PDF', 'error');
+                return;
             }
-        }, 1500);
+
+            const { jsPDF } = window.jspdf;
+            // تعيين الأبعاد على A4 قياسي
+            const doc = new jsPDF('p', 'mm', 'a4'); 
+
+            // دالة مساعدة لتحميل الصورة والحصول على أبعادها
+            const loadImage = (src) => new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = src;
+            });
+
+            // تحميل جميع الصور بشكل غير متزامن
+            const imagesToProcess = this.selectedImages.map(image => loadImage(image.src));
+            const loadedImages = await Promise.all(imagesToProcess);
+            
+            loadedImages.forEach((img, index) => {
+                // إضافة صفحة جديدة لكل صورة بعد الصورة الأولى
+                if (index > 0) doc.addPage();
+                
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = doc.internal.pageSize.getHeight();
+                
+                const imgWidth = img.width;
+                const imgHeight = img.height;
+                
+                // حساب الأبعاد الجديدة لـ احتواء الصورة في الصفحة
+                const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+                const finalWidth = imgWidth * ratio * 0.9; // 90% للحصول على هامش
+                const finalHeight = imgHeight * ratio * 0.9;
+
+                // إضافة الصورة إلى PDF في منتصف الصفحة
+                const x = (pdfWidth - finalWidth) / 2;
+                const y = (pdfHeight - finalHeight) / 2;
+                
+                doc.addImage(img, 'JPEG', x, y, finalWidth, finalHeight);
+            });
+
+            // أمر التنزيل (يجبر التنزيل إلى مجلد Downloads)
+            doc.save('ScannerX_Converted.pdf'); 
+            
+            this.showNotification(`تم تحويل ${this.selectedImages.length} صورة بنجاح!`, 'success');
+            showInterstitialAd();
+            this.removeAllImages();
+
+        } catch (error) {
+            console.error('خطأ في التحويل:', error);
+            this.showNotification('حدث خطأ أثناء التحويل', 'error');
+        } finally {
+             document.getElementById('loadingBar').style.width = '0%';
+        }
     }
 
-    // 🌟 دالة جديدة: التعامل مع اختيار ملف PDF
+
+    // ===========================================
+    // دوال تحويل PDF إلى Word (وهمي)
+    // ===========================================
+
     handlePdfSelection(event) {
         const file = event.target.files[0];
         if (file && file.type === 'application/pdf') {
@@ -335,7 +330,6 @@ class ImageToPDFConverter {
         event.target.value = '';
     }
 
-    // 🌟 دالة جديدة: تحويل PDF إلى Word (وظيفة محاكاة)
     convertPdfToWord() {
         if (!this.selectedPdfFile) {
             this.showNotification('يرجى اختيار ملف PDF أولاً', 'error');
@@ -346,7 +340,7 @@ class ImageToPDFConverter {
 
         setTimeout(() => {
             try {
-                // محاكاة لعملية تحويل ناجحة
+                // محاكاة لعملية تحويل ناجحة (تحويل حقيقي يتطلب خادم)
                 const wordFileName = this.selectedPdfFile.name.replace('.pdf', '.docx');
 
                 // تنزيل ملف DOCX وهمي
@@ -361,6 +355,7 @@ class ImageToPDFConverter {
                 URL.revokeObjectURL(url);
 
                 this.showNotification('تم التحويل إلى Word بنجاح!', 'success');
+                showInterstitialAd();
                 this.selectedPdfFile = null; // مسح الملف المحدد
                 this.elements.pdfActionsSection?.classList.add('hidden');
 
@@ -371,8 +366,9 @@ class ImageToPDFConverter {
         }, 3000);
     }
 
+
     // ===========================================
-    // دوال الإشعارات والتحميل (التي كانت مفقودة)
+    // دوال الإشعارات والتحميل (مساعدات)
     // ===========================================
     showLoading(message = 'جاري المعالجة...') {
         document.getElementById('loadingBar').style.width = '100%';
@@ -387,7 +383,9 @@ class ImageToPDFConverter {
             console.log(`💡 إشعار: ${message}`);
         }
         // إيقاف شريط التحميل بعد الإشعار
-        document.getElementById('loadingBar').style.width = '0%';
+        if (type !== 'info') {
+             document.getElementById('loadingBar').style.width = '0%';
+        }
     }
 
     showLoadingBar() {
@@ -409,5 +407,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // جعل الدالة متاحة globally للإزالة الفردية
-window.app = app;
 window.adsbygoogle = window.adsbygoogle || [];
