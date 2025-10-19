@@ -1,4 +1,4 @@
-// js/script.js - الإصدار النهائي والمصحح (شامل المفتاح الجديد)
+// js/script.js - الإصدار المجاني بالكامل (يستخدم PDF.js لاستخراج النص)
 
 // ===========================================
 // PWA: تسجيل العامل الخدمي (Service Worker)
@@ -16,35 +16,35 @@ if ('serviceWorker' in navigator) {
 }
 
 // ===========================================
-// AdSense & CloudConvert API Settings
+// AdSense & API Settings (تم إزالة CloudConvert)
 // ===========================================
 const INTERSTITIAL_FREQUENCY = 3;
 let conversionCount = 0;
 const AD_CLIENT = "ca-pub-6516738542213361";
 const AD_SLOT = "8064067747"; 
 
-// 🛑 المفتاح السري الجديد والمصحح لـ CloudConvert API 🛑
-const CLOUDCONVERT_API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZmZiY2ZkZWI2NmNhNzhjMGU0NDExMjYzNWU1ODU2YmI3MWZmYTkwNTUyOTgyZTYxNzg5YWJmZTQyMTZjYmYzZmY3ZGM4NmY4MDVjMGIxZWUiLCJpYXQiOjE3NjA4Nzk4OTUuODI5MDg3LCJuYmYiOjE3NjA4Nzk4OTUuODI5MDg5LCJleHAiOjQ5MTY1NTM0OTUuODA3OTMxLCJzdWIiOiI3MzIyODYyOSIsInNjb3BlcyI6WyJ1c2VyLndyaXRlIiwidGFzay5yZWFkIiwidGFzay53cml0ZSJdfQ.Td6AF6UbrPW9GFMehCBQCB0AHUKQrmFFkVSTToHKdYVWBmge0uGTBLH4LFx7xs2UCNx1hNu_46eBt-GeT1EGPymJZmrD9CD0NEg_2dAg7hbByw0xf3whnUbvdjXkFbLFgsrBgPNTQQydh71U0LJbD4AKQeSl1l_nnEaVsYa2Ypx8hP7wOneEMhmuU3M8zMJhCjzzymxvQm1VBFQT-wkhOHniF4vFoHxmpmHahBRGIw2PzBGowdiWSY79f8Iwxbh6D9wVJumq8pisVPJegILkk6J3PCIb6DyR3RMw32Seh1x1WnOM_xXtMBPOpBfSzxJu34NkwI4_l0shyEPr_fPpaLoWkkDxOC3zKdEGlEgEfIwJ96MOJqJ0T3QHQBzRsUKBQAHYHRIeK-zdr0ygLNbpHZYscglrp9q8t5SLP5OeR76GduIe4ph8W7NixxUQ4Ju6-Vg_c-Q6H_lmDOocdMFzXpjRg4mWVVTgBhlSnDxu75SJHw59ocCGVyX_4Mg3CczSOH4Bii_O5mqb56vmgOXH4YzF7IfQ0HDo9vvw_eeMS64thcJMpWgsDkobkXntLg9zV0ygB6aFCDS21EOcSEfgO2Qovk-KV4xzM2BvN3uG4-tBg58yZuEEJw2Bfh-a7zL_6yByZbP0LG7bae1NRkFS0RfPYbybGpzT86IyXD6hLwM";
-const CLOUDCONVERT_ENDPOINT = "https://api.cloudconvert.com/v2/jobs";
-
+// دالة للإعلانات (تم تعديلها لتجنب خطأ .catch)
 function showInterstitialAd() {
     conversionCount++;
 
     if (conversionCount % INTERSTITIAL_FREQUENCY === 0) {
         if (typeof adsbygoogle !== 'undefined') {
             console.log(`Conversion count: ${conversionCount}. Attempting to show interstitial ad.`);
-
-            (adsbygoogle.push({
-                google_ad_client: AD_CLIENT,
-                enable_page_level_ads: true,
-                overlays: {
-                    interstitial: {
-                        google_ad_slot: AD_SLOT
+            
+            // تم التعديل: استخدام try/catch بدلاً من .catch() على push
+            try {
+                adsbygoogle.push({
+                    google_ad_client: AD_CLIENT,
+                    enable_page_level_ads: true,
+                    overlays: {
+                        interstitial: {
+                            google_ad_slot: AD_SLOT
+                        }
                     }
-                }
-            })).catch(error => {
-                console.warn("Ad push error: ", error);
-            });
+                });
+            } catch (error) {
+                console.warn("Ad push error:", error);
+            }
         } else {
             console.warn("AdSense library not fully loaded yet.");
         }
@@ -109,6 +109,7 @@ class ImageToPDFConverter {
         // ربط أحداث تحويل PDF إلى Word
         this.elements.pdfUploadBox?.addEventListener('click', () => this.elements.pdfInput?.click());
         this.elements.pdfInput?.addEventListener('change', (e) => this.handlePdfSelection(e));
+        // تم تغيير الدالة لتنفيذ التحويل المجاني
         this.elements.convertPdfToWordBtn?.addEventListener('click', () => this.convertPdfToWord());
 
         this.initDragAndDrop();
@@ -187,7 +188,8 @@ class ImageToPDFConverter {
 
     updateSelectedImagesUI() {
         const count = this.selectedImages.length;
-        this.elements.imagesCount.textContent = count;
+        // التحقق من وجود العنصر قبل الوصول إليه
+        if (this.elements.imagesCount) this.elements.imagesCount.textContent = count;
 
         if (count > 0) {
             this.elements.selectedImagesSection?.classList.remove('hidden');
@@ -237,7 +239,7 @@ class ImageToPDFConverter {
     }
 
     // ===========================================
-    // 🌟 دالة تحويل الصور إلى PDF (المنطق الصحيح) 🌟
+    // 🌟 دالة تحويل الصور إلى PDF
     // ===========================================
 
     async convertAllToPDF() {
@@ -249,8 +251,9 @@ class ImageToPDFConverter {
         this.showLoading(`جاري تحويل ${this.selectedImages.length} صورة...`);
 
         try {
-            if (typeof window.jspdf === 'undefined') {
-                this.showNotification('خطأ في تحميل مكتبة PDF', 'error');
+            // تحسين: فحص وجود المكتبة بشكل أفضل
+            if (!window.jspdf || !window.jspdf.jsPDF) {
+                this.showNotification('خطأ في تحميل مكتبة PDF.jsPDF', 'error');
                 return;
             }
 
@@ -296,20 +299,20 @@ class ImageToPDFConverter {
             console.error('خطأ في التحويل:', error);
             this.showNotification('حدث خطأ أثناء التحويل', 'error');
         } finally {
-             document.getElementById('loadingBar').style.width = '0%';
+             this.hideLoading();
         }
     }
 
 
     // ===========================================
-    // 💥 دوال تحويل PDF إلى Word (تحويل حقيقي عبر CloudConvert API) 💥
+    // 🌟 دالة تحويل PDF إلى Word (مجاني: استخراج النص) 🌟
     // ===========================================
 
     handlePdfSelection(event) {
         const file = event.target.files[0];
         if (file && file.type === 'application/pdf') {
             this.selectedPdfFile = file;
-            this.elements.pdfFileName.textContent = file.name;
+            if (this.elements.pdfFileName) this.elements.pdfFileName.textContent = file.name;
             this.elements.pdfActionsSection?.classList.remove('hidden');
             this.showNotification(`تم تحديد ملف: ${file.name}`, 'info');
         } else if (file) {
@@ -320,146 +323,68 @@ class ImageToPDFConverter {
         event.target.value = '';
     }
     
-    // 🌟 الدالة الرئيسية الجديدة: تحويل PDF إلى Word (تستخدم CloudConvert) 🌟
+    // دالة التحويل المجانية: تستخرج النص وتحفظه كملف TXT
     async convertPdfToWord() {
         if (!this.selectedPdfFile) {
             this.showNotification('يرجى اختيار ملف PDF أولاً', 'error');
             return;
         }
         
-        this.showLoading('جاري بدء مهمة التحويل (CloudConvert)...');
+        // التحقق من تحميل المكتبة المجانية (PDF.js)
+        if (!window.pdfjsLib) {
+             this.showNotification('خطأ: لم يتم تحميل مكتبة PDF.js لإجراء التحويل المجاني.', 'error');
+             return;
+        }
 
+        this.showLoading('جاري استخراج النص محلياً...');
+        
         try {
             const fileName = this.selectedPdfFile.name;
             
-            // 1. بدء مهمة التحويل على CloudConvert
-            const job = await this.startCloudConvertJob(this.selectedPdfFile);
+            // (1) قراءة الملف كـ ArrayBuffer (مطلوب بواسطة مكتبة PDF.js)
+            const arrayBuffer = await this.fileToArrayBuffer(this.selectedPdfFile);
 
-            if (job && job.id) {
-                this.showLoading('جاري التحويل (قد يستغرق بعض الوقت)...');
-                
-                // 2. انتظار انتهاء المهمة (Polling)
-                let resultUrl = await this.pollJobStatus(job.id); 
-
-                if (resultUrl) {
-                    // 3. تنزيل الملف المحول
-                    this.downloadFile(resultUrl, fileName.replace('.pdf', '.docx'));
-                    
-                    this.showNotification('تم التحويل إلى Word بنجاح!', 'success');
-                    showInterstitialAd();
-                    this.selectedPdfFile = null;
-                    this.elements.pdfActionsSection?.classList.add('hidden');
-                } else {
-                    this.showNotification('فشل التحويل. يرجى المحاولة مرة أخرى.', 'error');
-                }
-            } else {
-                 // إذا فشل startCloudConvertJob سيظهر إشعار الخطأ بداخله
-                 // ونتأكد هنا فقط من مسح الشريط
+            // (2) استخراج النص
+            const pdfjsLib = window.pdfjsLib;
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            let fullText = '';
+            
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                const pageText = textContent.items.map(item => item.str).join(' ');
+                fullText += pageText + '\n\n' + '-------------------- صفحة ' + i + ' --------------------' + '\n\n';
             }
+            
+            // (3) تنزيل الملف كنص (TXT)
+            const blob = new Blob([fullText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            this.downloadFile(url, fileName.replace('.pdf', '_Extracted.txt'));
+
+            this.showNotification('تم استخراج النص بنجاح! (تم حفظه كملف TXT)', 'success');
+            showInterstitialAd();
+            this.selectedPdfFile = null;
+            this.elements.pdfActionsSection?.classList.add('hidden');
 
         } catch (error) {
-            console.error('خطأ في تحويل PDF إلى Word:', error);
-            this.showNotification('حدث خطأ أثناء تحويل PDF إلى Word', 'error');
+            console.error('خطأ في تحويل PDF المحلي:', error);
+            this.showNotification('فشل التحويل المحلي. (قد يكون ملف PDF غير نصي).', 'error');
         } finally {
-            document.getElementById('loadingBar').style.width = '0%';
+            this.hideLoading();
         }
     }
-
-
-    // 🌟 دالة مساعدة: بدء مهمة CloudConvert مبسطة (للتطبيق المتصفح) 🌟
-    async startCloudConvertJob(file) {
-        // الخطوة 1: إنشاء المهمة (Job) والحصول على رابط الرفع
-        const jobResponse = await fetch(CLOUDCONVERT_ENDPOINT, {
-            method: 'POST',
-            headers: {
-                // إرسال مفتاح API في رأس التخويل (Authorization Header)
-                'Authorization': `Bearer ${CLOUDCONVERT_API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "tasks": {
-                    "upload-file": {
-                        "operation": "import/upload"
-                    },
-                    "convert-to-docx": {
-                        "operation": "convert",
-                        "input": "upload-file",
-                        "output_format": "docx",
-                        "engine": "office" 
-                    },
-                    "export-word": {
-                        "operation": "export/url",
-                        "input": "convert-to-docx"
-                    }
-                }
-            })
+    
+    // دالة مساعدة لقراءة الملف
+    fileToArrayBuffer(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsArrayBuffer(file);
         });
-
-        // 💥 معالجة خطأ إنشاء المهمة (مثل 401 Unauthorized أو 403 Forbidden)
-        if (!jobResponse.ok) {
-            const errorText = await jobResponse.text();
-            this.showNotification(`فشل إنشاء مهمة CloudConvert. (الرمز: ${jobResponse.status})`, 'error');
-            console.error("CloudConvert Job Creation Error:", errorText);
-            return null;
-        }
-
-        const job = await jobResponse.json();
-        
-        if (job.data && job.data.id) {
-            const uploadTask = job.data.tasks.find(t => t.operation === 'import/upload');
-            
-            // الخطوة 2: رفع الملف فعلياً باستخدام النموذج (FormData)
-            const formData = new FormData();
-            Object.entries(uploadTask.result.form.parameters).forEach(([key, value]) => {
-                formData.append(key, value);
-            });
-            formData.append('file', file);
-
-            const uploadResponse = await fetch(uploadTask.result.form.url, {
-                method: 'POST',
-                body: formData
-            });
-            
-            // 💥 معالجة خطأ الرفع
-            if (uploadResponse.ok) {
-                 return job.data;
-            } else {
-                 const errorText = await uploadResponse.text();
-                 this.showNotification(`فشل رفع الملف إلى CloudConvert. (الرمز: ${uploadResponse.status})`, 'error');
-                 console.error("CloudConvert Upload Error:", errorText);
-                 return null;
-            }
-        }
-        return null;
     }
 
-
-    // 🌟 دالة مساعدة: انتظار انتهاء مهمة CloudConvert (Polling)
-    async pollJobStatus(jobId) {
-        let maxAttempts = 40; 
-        let delay = 3000; 
-
-        for (let i = 0; i < maxAttempts; i++) {
-            await new Promise(resolve => setTimeout(resolve, delay));
-            
-            this.showLoading(`جاري التحقق من حالة التحويل... (${i + 1}/${maxAttempts})`);
-
-            const statusResponse = await fetch(`${CLOUDCONVERT_ENDPOINT}/${jobId}`, {
-                headers: { 'Authorization': `Bearer ${CLOUDCONVERT_API_KEY}` }
-            });
-            const status = await statusResponse.json();
-
-            if (status.data.status === 'finished') {
-                const exportTask = status.data.tasks.find(t => t.operation === 'export/url');
-                return exportTask?.result?.files[0]?.url; 
-            } else if (status.data.status === 'error') {
-                throw new Error("حدث خطأ في CloudConvert: " + status.data.message);
-            }
-        }
-        return null; 
-    }
-
-    // 🌟 دالة مساعدة: تنزيل ملف من رابط
+    // 🌟 دالة مساعدة: تنزيل ملف من رابط (مستخدمة في PDF.js و jsPDF)
     downloadFile(url, filename) {
         const a = document.createElement('a');
         a.href = url;
@@ -467,36 +392,45 @@ class ImageToPDFConverter {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+        URL.revokeObjectURL(url); // تحرير الذاكرة
     }
     
     // ===========================================
-    // دوال الإشعارات والتحميل (مساعدات)
+    // دوال الإشعارات والتحميل (تم تحسينها)
     // ===========================================
     showLoading(message = 'جاري المعالجة...') {
-        document.getElementById('loadingBar').style.width = '100%';
+        const bar = document.getElementById('loadingBar');
+        if (bar) bar.style.width = '100%';
         console.log(message);
+    }
+    
+    hideLoading() {
+        const bar = document.getElementById('loadingBar');
+        if (bar) bar.style.width = '0%';
     }
 
     showNotification(message, type) {
         if (type === 'error') {
             console.error(`❌ إشعار خطأ: ${message}`);
-            // إضافة تنبيه (Alert) للمستخدمين على الهاتف لسهولة التشخيص
             alert(`خطأ: ${message}`); 
         } else {
             console.log(`💡 إشعار: ${message}`);
         }
-        // إيقاف شريط التحميل بعد الإشعار
+        // إخفاء شريط التحميل بعد الإشعار
         if (type !== 'info') {
-             document.getElementById('loadingBar').style.width = '0%';
+             this.hideLoading();
         }
     }
 
     showLoadingBar() {
-        document.getElementById('loadingBar').style.width = '50%';
+        const bar = document.getElementById('loadingBar');
+        if (!bar) return;
+        
+        bar.style.width = '50%';
         setTimeout(() => {
-            document.getElementById('loadingBar').style.width = '100%';
+            bar.style.width = '100%';
             setTimeout(() => {
-                document.getElementById('loadingBar').style.width = '0%';
+                bar.style.width = '0%';
             }, 300);
         }, 500);
     }
@@ -508,5 +442,4 @@ document.addEventListener('DOMContentLoaded', function() {
     app = new ImageToPDFConverter();
 });
 
-// جعل الدالة متاحة globally للإزالة الفردية
 window.adsbygoogle = window.adsbygoogle || [];

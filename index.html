@@ -1,22 +1,20 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html>                                                   <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <meta name="msvalidate.01" content="EFC61E5D106220023439CAF98B06427F" />
-    
+                                                                      <meta name="msvalidate.01" content="EFC61E5D106220023439CAF98B06427F" />
+
     <meta name="description" content="محول صور إلى PDF مجاني وسريع. قم بتحويل الصور إلى ملف PDF واحد بجودة عالية، بالإضافة إلى ميزة تحويل ملفات PDF إلى Word (DOCX) عبر الإنترنت مجانًا.">
     <meta name="keywords" content="صورة إلى PDF, تحويل صور, PDF إلى Word, DOCX, محول PDF مجاني, أونلاين, PDF to DOCX, image to pdf, pdf converter">
 
     <title>محول صور إلى PDF و PDF إلى Word مجاني وسريع</title>
-    
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="images/icon-192x192.png">
-    
+
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script type="text/javascript">
@@ -28,7 +26,7 @@
     </script>
 </head>
 <body>
-    
+
     <div class="loading-bar" id="loadingBar"></div>
 
     <header class="header">
@@ -38,7 +36,7 @@
     </header>
 
     <main class="container">
-        
+
         <section class="converter-section">
             <div class="converter-card">
                 <h2>صور (JPEG/PNG) إلى ملف PDF</h2>
@@ -47,7 +45,7 @@
                     <button class="btn btn-primary" id="galleryBtn"><i class="fas fa-images"></i> اختيار من المعرض</button>
                     <button class="btn btn-primary" id="cameraBtn"><i class="fas fa-camera"></i> التقاط صورة</button>
                 </div>
-                
+
                 <input type="file" id="imageInput" accept="image/*" multiple hidden>
 
                 <div class="upload-section">
@@ -82,7 +80,7 @@
         <section class="pdf-converter-section">
             <div class="converter-card secondary-card">
                 <h2>تحويل PDF إلى Word (DOCX)</h2>
-                
+
                 <input type="file" id="pdfInput" accept="application/pdf" hidden>
 
                 <div class="upload-section">
@@ -99,7 +97,7 @@
 
             </div>
         </section>
-        
+
         <section class="description-section">
             <h2>أفضل محول للصور و PDF عبر الإنترنت</h2>
             <p>
@@ -118,13 +116,20 @@
         </section>
 
     </main>
-    
+
     <footer class="footer">
         <div class="container">
             <p>&copy; 2025 ScannerX. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs" type="module"></script>
+    <script>
+        // تهيئة المكتبة وجعلها متاحة لـ script.js
+        import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs';
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs';
+        window.pdfjsLib = pdfjsLib; // يتم استخدامها بواسطة script.js
+    </script>
     <script src="js/script.js"></script>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6516738542213361" crossorigin="anonymous"></script>
