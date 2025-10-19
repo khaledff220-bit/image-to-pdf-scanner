@@ -1,4 +1,4 @@
-// js/script.js - الإصدار النهائي (شامل PWA، AdSense، وتحويل CloudConvert الحقيقي)
+// js/script.js - الإصدار النهائي والمصحح (شامل المفتاح الجديد)
 
 // ===========================================
 // PWA: تسجيل العامل الخدمي (Service Worker)
@@ -23,8 +23,8 @@ let conversionCount = 0;
 const AD_CLIENT = "ca-pub-6516738542213361";
 const AD_SLOT = "8064067747"; 
 
-// 🛑 المفتاح السري الجديد لـ CloudConvert API (مهم: تم التحديث هنا) 🛑
-const CLOUDCONVERT_API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiN2VmNzY1NzVlYjRlNTQxNmI5NmQ3ZDMxZDUwYmYyMWUwZTJjMzVhZTc2MDg2NzZhODBmZGUzMWI5MzVjNTNmZmIwYTIwOWQyZDkxNTY5MGYiLCJpYXQiOjE3NjA4NzkwMTEuMjMwMjM3LCJuYmYiOjE3NjA4NzkwMTEuMjMwMjM5LCJleHAiOjQ5MTY1NTI2MTEuMjI3MDQ4LCJzdWIiOiI3MzIyODYyOSIsInNjb3BlcyI6WyJ0YXNrLnJlYWQiLCJ1c2VyLndyaXRlIl19.VGXHZIzWArH_UasESuIdt8qUuYon2ynpDpxFcz8pMFMUc4bovmVM33refehwXLTYsYnb3q7Tw3GzpFFONATELp77fXEbH3gKRIZYn49SjqlO7L59WCYDEvgzt9szYWUOudTg7LU3pmBEHdygodWf2sfpPzZ8cCsOWhuONm_a_j681ctXbSfrfo_4bIWYK7yybSRF5OBPOsHH2JMYY0S651AMLk_8QEhkyO_ba41CVTmFY4Wqc42kbynIZyMUQt1qEWRc6mCgRvEa6az1ekKcQMy9uO0jgTLmhTOFU7gPtPv3cO1H8aTvCkMokWqQsIZ_KrD7zPRqpMqJun6arAbx4aP0w86zXouKaxKYnQpCN24ruv2yDocCY92LrTvFsYh_UYel_Ib02bg5POsDmSwLLu5HMlVCgIFuABJ2vzlhmYuuynqb7-yW8haKmQcA5lBpHUVADpVMZqmSCqG_EQYIHwmIc44-HUh1Y-XT4Il9U59AA_qZiHdnN-HS7FtFPeR4YhnFpY1l5nT8A08GdO1LAiFlxY7MnT7Ox-V8lKWhSI1Vy-IxGPgKI_bh5zpVFCk-1JIQfagYpFn0B0WemVdy__ofn_iArCuYvxHI_261irsokNbPl8LAu0HCMHNAlvW634phruGkGj7XZArwJsBdg7rgLuzUOKaZ_fQidJ1HCTc";
+// 🛑 المفتاح السري الجديد والمصحح لـ CloudConvert API 🛑
+const CLOUDCONVERT_API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZmZiY2ZkZWI2NmNhNzhjMGU0NDExMjYzNWU1ODU2YmI3MWZmYTkwNTUyOTgyZTYxNzg5YWJmZTQyMTZjYmYzZmY3ZGM4NmY4MDVjMGIxZWUiLCJpYXQiOjE3NjA4Nzk4OTUuODI5MDg3LCJuYmYiOjE3NjA4Nzk4OTUuODI5MDg5LCJleHAiOjQ5MTY1NTM0OTUuODA3OTMxLCJzdWIiOiI3MzIyODYyOSIsInNjb3BlcyI6WyJ1c2VyLndyaXRlIiwidGFzay5yZWFkIiwidGFzay53cml0ZSJdfQ.Td6AF6UbrPW9GFMehCBQCB0AHUKQrmFFkVSTToHKdYVWBmge0uGTBLH4LFx7xs2UCNx1hNu_46eBt-GeT1EGPymJZmrD9CD0NEg_2dAg7hbByw0xf3whnUbvdjXkFbLFgsrBgPNTQQydh71U0LJbD4AKQeSl1l_nnEaVsYa2Ypx8hP7wOneEMhmuU3M8zMJhCjzzymxvQm1VBFQT-wkhOHniF4vFoHxmpmHahBRGIw2PzBGowdiWSY79f8Iwxbh6D9wVJumq8pisVPJegILkk6J3PCIb6DyR3RMw32Seh1x1WnOM_xXtMBPOpBfSzxJu34NkwI4_l0shyEPr_fPpaLoWkkDxOC3zKdEGlEgEfIwJ96MOJqJ0T3QHQBzRsUKBQAHYHRIeK-zdr0ygLNbpHZYscglrp9q8t5SLP5OeR76GduIe4ph8W7NixxUQ4Ju6-Vg_c-Q6H_lmDOocdMFzXpjRg4mWVVTgBhlSnDxu75SJHw59ocCGVyX_4Mg3CczSOH4Bii_O5mqb56vmgOXH4YzF7IfQ0HDo9vvw_eeMS64thcJMpWgsDkobkXntLg9zV0ygB6aFCDS21EOcSEfgO2Qovk-KV4xzM2BvN3uG4-tBg58yZuEEJw2Bfh-a7zL_6yByZbP0LG7bae1NRkFS0RfPYbybGpzT86IyXD6hLwM";
 const CLOUDCONVERT_ENDPOINT = "https://api.cloudconvert.com/v2/jobs";
 
 function showInterstitialAd() {
@@ -395,7 +395,7 @@ class ImageToPDFConverter {
             })
         });
 
-        // 💥 معالجة خطأ إنشاء المهمة (مثل 401 Unauthorized)
+        // 💥 معالجة خطأ إنشاء المهمة (مثل 401 Unauthorized أو 403 Forbidden)
         if (!jobResponse.ok) {
             const errorText = await jobResponse.text();
             this.showNotification(`فشل إنشاء مهمة CloudConvert. (الرمز: ${jobResponse.status})`, 'error');
