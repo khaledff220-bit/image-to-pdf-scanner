@@ -1,4 +1,4 @@
-// js/script.js - الإصدار المجاني بالكامل (يستخدم PDF.js لاستخراج النص)
+// js/script.js - الإصدار النهائي: تحويل الصور إلى PDF فقط
 
 // ===========================================
 // PWA: تسجيل العامل الخدمي (Service Worker)
@@ -16,22 +16,21 @@ if ('serviceWorker' in navigator) {
 }
 
 // ===========================================
-// AdSense & API Settings (تم إزالة CloudConvert)
+// AdSense Settings
 // ===========================================
 const INTERSTITIAL_FREQUENCY = 3;
 let conversionCount = 0;
 const AD_CLIENT = "ca-pub-6516738542213361";
 const AD_SLOT = "8064067747"; 
 
-// دالة للإعلانات (تم تعديلها لتجنب خطأ .catch)
 function showInterstitialAd() {
     conversionCount++;
 
     if (conversionCount % INTERSTITIAL_FREQUENCY === 0) {
         if (typeof adsbygoogle !== 'undefined') {
             console.log(`Conversion count: ${conversionCount}. Attempting to show interstitial ad.`);
-            
-            // تم التعديل: استخدام try/catch بدلاً من .catch() على push
+
+            // تم التعديل: استخدام try/catch لتجنب خطأ .catch()
             try {
                 adsbygoogle.push({
                     google_ad_client: AD_CLIENT,
@@ -61,14 +60,14 @@ class ImageToPDFConverter {
     constructor() {
         this.selectedImages = [];
         this.currentImage = null;
-        this.selectedPdfFile = null;
+        // تم حذف this.selectedPdfFile
         this.init();
     }
 
     init() {
         this.bindEvents();
         this.showLoadingBar();
-        console.log('✅ تم تهيئة محول PDF');
+        console.log('✅ تم تهيئة محول الصور إلى PDF');
     }
 
     bindEvents() {
@@ -88,12 +87,7 @@ class ImageToPDFConverter {
             removeAllBtn: document.getElementById('removeAllBtn'),
             rotateBtn: document.getElementById('rotateBtn'),
 
-            // عناصر تحويل PDF إلى Word
-            pdfUploadBox: document.getElementById('pdfUploadBox'),
-            pdfInput: document.getElementById('pdfInput'),
-            pdfActionsSection: document.getElementById('pdfActionsSection'),
-            pdfFileName: document.getElementById('pdfFileName'),
-            convertPdfToWordBtn: document.getElementById('convertPdfToWordBtn')
+            // تم حذف عناصر تحويل PDF إلى Word
         };
 
         // ربط أحداث الصور
@@ -106,11 +100,7 @@ class ImageToPDFConverter {
         this.elements.removeAllBtn?.addEventListener('click', () => this.removeAllImages());
         this.elements.rotateBtn?.addEventListener('click', () => this.rotateImage());
 
-        // ربط أحداث تحويل PDF إلى Word
-        this.elements.pdfUploadBox?.addEventListener('click', () => this.elements.pdfInput?.click());
-        this.elements.pdfInput?.addEventListener('change', (e) => this.handlePdfSelection(e));
-        // تم تغيير الدالة لتنفيذ التحويل المجاني
-        this.elements.convertPdfToWordBtn?.addEventListener('click', () => this.convertPdfToWord());
+        // تم حذف ربط أحداث تحويل PDF إلى Word
 
         this.initDragAndDrop();
     }
@@ -188,7 +178,6 @@ class ImageToPDFConverter {
 
     updateSelectedImagesUI() {
         const count = this.selectedImages.length;
-        // التحقق من وجود العنصر قبل الوصول إليه
         if (this.elements.imagesCount) this.elements.imagesCount.textContent = count;
 
         if (count > 0) {
@@ -239,7 +228,7 @@ class ImageToPDFConverter {
     }
 
     // ===========================================
-    // 🌟 دالة تحويل الصور إلى PDF
+    // 🌟 دالة تحويل الصور إلى PDF (المنطق الصحيح) 🌟
     // ===========================================
 
     async convertAllToPDF() {
@@ -251,9 +240,8 @@ class ImageToPDFConverter {
         this.showLoading(`جاري تحويل ${this.selectedImages.length} صورة...`);
 
         try {
-            // تحسين: فحص وجود المكتبة بشكل أفضل
             if (!window.jspdf || !window.jspdf.jsPDF) {
-                this.showNotification('خطأ في تحميل مكتبة PDF.jsPDF', 'error');
+                this.showNotification('خطأ في تحميل مكتبة PDF', 'error');
                 return;
             }
 
@@ -305,101 +293,11 @@ class ImageToPDFConverter {
 
 
     // ===========================================
-    // 🌟 دالة تحويل PDF إلى Word (مجاني: استخراج النص) 🌟
-    // ===========================================
-
-    handlePdfSelection(event) {
-        const file = event.target.files[0];
-        if (file && file.type === 'application/pdf') {
-            this.selectedPdfFile = file;
-            if (this.elements.pdfFileName) this.elements.pdfFileName.textContent = file.name;
-            this.elements.pdfActionsSection?.classList.remove('hidden');
-            this.showNotification(`تم تحديد ملف: ${file.name}`, 'info');
-        } else if (file) {
-            this.selectedPdfFile = null;
-            this.elements.pdfActionsSection?.classList.add('hidden');
-            this.showNotification('الرجاء اختيار ملف PDF صالح', 'error');
-        }
-        event.target.value = '';
-    }
-    
-    // دالة التحويل المجانية: تستخرج النص وتحفظه كملف TXT
-    async convertPdfToWord() {
-        if (!this.selectedPdfFile) {
-            this.showNotification('يرجى اختيار ملف PDF أولاً', 'error');
-            return;
-        }
-        
-        // التحقق من تحميل المكتبة المجانية (PDF.js)
-        if (!window.pdfjsLib) {
-             this.showNotification('خطأ: لم يتم تحميل مكتبة PDF.js لإجراء التحويل المجاني.', 'error');
-             return;
-        }
-
-        this.showLoading('جاري استخراج النص محلياً...');
-        
-        try {
-            const fileName = this.selectedPdfFile.name;
-            
-            // (1) قراءة الملف كـ ArrayBuffer (مطلوب بواسطة مكتبة PDF.js)
-            const arrayBuffer = await this.fileToArrayBuffer(this.selectedPdfFile);
-
-            // (2) استخراج النص
-            const pdfjsLib = window.pdfjsLib;
-            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-            let fullText = '';
-            
-            for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                const textContent = await page.getTextContent();
-                const pageText = textContent.items.map(item => item.str).join(' ');
-                fullText += pageText + '\n\n' + '-------------------- صفحة ' + i + ' --------------------' + '\n\n';
-            }
-            
-            // (3) تنزيل الملف كنص (TXT)
-            const blob = new Blob([fullText], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            this.downloadFile(url, fileName.replace('.pdf', '_Extracted.txt'));
-
-            this.showNotification('تم استخراج النص بنجاح! (تم حفظه كملف TXT)', 'success');
-            showInterstitialAd();
-            this.selectedPdfFile = null;
-            this.elements.pdfActionsSection?.classList.add('hidden');
-
-        } catch (error) {
-            console.error('خطأ في تحويل PDF المحلي:', error);
-            this.showNotification('فشل التحويل المحلي. (قد يكون ملف PDF غير نصي).', 'error');
-        } finally {
-            this.hideLoading();
-        }
-    }
-    
-    // دالة مساعدة لقراءة الملف
-    fileToArrayBuffer(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsArrayBuffer(file);
-        });
-    }
-
-    // 🌟 دالة مساعدة: تنزيل ملف من رابط (مستخدمة في PDF.js و jsPDF)
-    downloadFile(url, filename) {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url); // تحرير الذاكرة
-    }
-    
-    // ===========================================
-    // دوال الإشعارات والتحميل (تم تحسينها)
+    // دوال الإشعارات والتحميل (مساعدات)
     // ===========================================
     showLoading(message = 'جاري المعالجة...') {
         const bar = document.getElementById('loadingBar');
+        // تم إضافة فحص if(bar) لتجنب الخطأ
         if (bar) bar.style.width = '100%';
         console.log(message);
     }
@@ -425,7 +323,7 @@ class ImageToPDFConverter {
     showLoadingBar() {
         const bar = document.getElementById('loadingBar');
         if (!bar) return;
-        
+
         bar.style.width = '50%';
         setTimeout(() => {
             bar.style.width = '100%';
