@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# تحديد ملفات الإعلانات للسماح بوصولها
+Allow: /ads.txt
+
+# تحديد مسار خريطة الموقع
+Sitemap: https://image-to-pdf-scanner.vercel.app/sitemap.xml

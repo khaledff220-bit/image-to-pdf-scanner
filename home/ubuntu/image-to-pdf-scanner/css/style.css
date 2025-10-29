@@ -1,0 +1,370 @@
+/*=================================================
+  CSS/style.css - الإصدار الكامل والمحدث (مع دعم الأدوات الجديدة)
+=================================================*/
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+
+:root {
+    --primary-color: #5E35B1; /* بنفسجي غامق */
+    --secondary-color: #7E57C2; /* بنفسجي فاتح */
+    --accent-color: #FFC107; /* لون مميز للتحميل */
+    --background-color: #F3E5F5; /* خلفية فاتحة جدًا */
+    --card-background: #FFFFFF; /* خلفية البطاقة بيضاء */
+    --text-color: #212121; /* لون النص الأساسي */
+    --success-color: #4CAF50;
+    --error-color: #F44336;
+    --dark-color: #1f2937;
+    --btn-radius: 8px;
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    direction: rtl; 
+    text-align: right;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 0;
+}
+
+h1, h2, h3, h4 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.7rem;
+    margin-top: 30px;
+    text-align: center;
+}
+
+/* شريط التحميل */
+.loading-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 4px;
+    background-color: var(--accent-color);
+    width: 0%;
+    transition: width 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+/* الرأس (Header) والتنقل (Navigation) */
+.header {
+    background-color: var(--primary-color);
+    color: var(--card-background);
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.header h1 {
+    color: var(--card-background);
+    font-size: 1.5rem;
+}
+
+.header nav {
+    display: flex;
+    gap: 15px;
+}
+
+.header nav a {
+    color: var(--card-background);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-weight: 600;
+}
+
+.header nav a:hover {
+    background-color: var(--secondary-color);
+}
+
+/* الأقسام الرئيسية (Main Sections) */
+main {
+    padding-top: 20px;
+}
+
+.converter-section {
+    margin-bottom: 40px;
+}
+
+.converter-card {
+    background-color: var(--card-background);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    margin-top: 20px;
+    transition: transform 0.3s ease;
+}
+
+.converter-card:hover {
+    transform: translateY(-3px);
+}
+
+.converter-card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+/* الأزرار (Buttons) */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--btn-radius);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.1s;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn i {
+    margin-left: 8px;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--card-background);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: var(--card-background);
+}
+
+.btn-success:hover {
+    background-color: #388E3C;
+}
+
+.btn-error {
+    background-color: var(--error-color);
+    color: var(--card-background);
+}
+
+.btn-error:hover {
+    background-color: #D32F2F;
+}
+
+/* قسم الرفع (Upload Section) */
+.upload-box {
+    border: 2px dashed var(--secondary-color);
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+}
+
+.upload-box:hover {
+    background-color: #F5F5F5;
+}
+
+.upload-box i {
+    font-size: 48px;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+/* قسم الصور المحددة */
+.selected-images {
+    margin-top: 20px;
+    border-top: 1px solid #E0E0E0;
+    padding-top: 20px;
+}
+
+.images-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.image-item {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.remove-btn {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: var(--error-color);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* حقول الإدخال الجديدة */
+.form-group {
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.text-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: right; 
+}
+
+/* قسم الوصف (Description Section) - المحتوى النصي الغني */
+.description-section {
+    background-color: var(--card-background);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.description-section h2 {
+    color: var(--dark-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.description-section h3, .description-section h4 {
+    color: var(--secondary-color);
+    margin-top: 20px;
+}
+
+.description-section p {
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+.description-section ul {
+    margin: 15px 0 20px 20px;
+    list-style-type: disc;
+}
+
+.description-section li {
+    margin-bottom: 8px;
+}
+
+/* تذييل الصفحة (Footer) */
+.footer {
+    background-color: var(--primary-color);
+    color: var(--card-background);
+    padding: 20px 0;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.footer .legal-links {
+    margin-top: 10px;
+}
+
+.footer .legal-links a {
+    color: var(--card-background);
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s;
+}
+
+.footer .legal-links a:hover {
+    color: var(--accent-color);
+}
+
+/* إخفاء العناصر */
+.hidden {
+    display: none !important;
+}
+
+/* استجابة الشاشات الصغيرة */
+@media (max-width: 768px) {
+    .header .container {
+        flex-direction: column;
+    }
+
+    .header nav {
+        margin-top: 10px;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .header nav a {
+        text-align: center;
+    }
+
+    .converter-card {
+        padding: 20px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}
