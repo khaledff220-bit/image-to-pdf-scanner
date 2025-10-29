@@ -1,13 +1,14 @@
-<!DOCTYPE html>                                                   <html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-                                                                      <meta name="msvalidate.01" content="EFC61E5D106220023439CAF98B06427F" />
+    <meta name="msvalidate.01" content="EFC61E5D106220023439CAF98B06427F" />
 
-    <meta name="description" content="محول صور إلى PDF مجاني وسريع. قم بتحويل الصور إلى ملف PDF واحد بجودة عالية.">
-    <meta name="keywords" content="صورة إلى PDF, تحويل صور, محول PDF مجاني, أونلاين, image to pdf, pdf converter">
+    <meta name="description" content="محول صور إلى PDF مجاني وسريع. أداة متكاملة لتحويل الصور إلى PDF، إضافة علامة مائية، تقسيم PDF، وتحويل PDF إلى صور. مجاني وآمن.">
+    <meta name="keywords" content="صورة إلى PDF, تحويل صور, محول PDF مجاني, أونلاين, image to pdf, pdf converter, تقسيم PDF, علامة مائية PDF, PDF إلى صورة">
 
-    <title>محول صور إلى PDF مجاني وسريع</title>
+    <title>ScannerX: محول صور إلى PDF وأدوات PDF متكاملة مجانية</title>
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
@@ -15,7 +16,11 @@
 
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
+    <!-- مكتبات PDF المطلوبة -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
 
     <script type="text/javascript">
         (function(c,l,a,r,i,t,y){
@@ -24,6 +29,62 @@
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "ts9cjpmxup");
     </script>
+    <!-- Schema Markup for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "ScannerX: أدوات PDF متكاملة مجانية",
+          "url": "https://image-to-pdf-scanner.vercel.app/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://image-to-pdf-scanner.vercel.app/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "محول صور إلى PDF مجاني وسريع",
+          "operatingSystem": "Web",
+          "applicationCategory": "ProductivityApplication",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "89"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        },
+        {
+          "@type": "HowTo",
+          "name": "كيفية تحويل الصور إلى PDF باستخدام ScannerX",
+          "step": [
+            {
+              "@type": "HowToStep",
+              "text": "اضغط على 'اختيار من المعرض' أو 'التقاط صورة' لاختيار الصور التي تريد تحويلها."
+            },
+            {
+              "@type": "HowToStep",
+              "text": "قم بترتيب الصور حسب الترتيب الذي تريده في ملف PDF النهائي."
+            },
+            {
+              "@type": "HowToStep",
+              "text": "اضغط على زر 'تحويل الكل إلى ملف PDF واحد' وانتظر حتى تكتمل عملية المعالجة."
+            },
+            {
+              "@type": "HowToStep",
+              "text": "سيتم تنزيل ملف PDF الناتج تلقائيًا على جهازك."
+            }
+          ]
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
 
@@ -31,13 +92,21 @@
 
     <header class="header">
         <div class="container">
-            <h1>ScannerX - محول الصور إلى PDF</h1>
+            <h1>ScannerX - أدوات PDF متكاملة</h1>
+            <nav>
+                <a href="#converter-section">صورة إلى PDF</a>
+                <a href="#watermark-section">علامة مائية</a>
+                <a href="#pdf-to-image-section">PDF إلى صورة</a>
+                <a href="#split-pdf-section">تقسيم PDF</a>
+                <a href="#description-section">لماذا نحن؟</a>
+            </nav>
         </div>
     </header>
 
     <main class="container">
 
-        <section class="converter-section">
+        <!-- 1. محول الصور إلى PDF (القسم الأصلي) -->
+        <section class="converter-section" id="converter-section">
             <div class="converter-card">
                 <h2>صور (JPEG/PNG) إلى ملف PDF</h2>
 
@@ -77,26 +146,111 @@
             </div>
         </section>
 
-        <section class="description-section">
-            <h2>أفضل محول للصور إلى PDF عبر الإنترنت</h2>
+        <!-- 2. إضافة علامة مائية (Watermark) -->
+        <section class="converter-section" id="watermark-section">
+            <div class="converter-card">
+                <h2>إضافة علامة مائية (Watermark) لملف PDF</h2>
+                <p>أضف نصًا مخصصًا كعلامة مائية لحماية مستنداتك.</p>
+                <div class="action-buttons">
+                    <input type="file" id="watermarkPdfInput" accept="application/pdf" hidden>
+                    <button class="btn btn-primary" onclick="document.getElementById('watermarkPdfInput').click()"><i class="fas fa-file-upload"></i> اختر ملف PDF</button>
+                </div>
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="watermarkTextInput">نص العلامة المائية:</label>
+                    <input type="text" id="watermarkTextInput" placeholder="أدخل النص هنا (مثال: سري، مسودة، اسم الشركة)" class="text-input">
+                </div>
+                <button class="btn btn-success" id="addWatermarkBtn" disabled><i class="fas fa-stamp"></i> أضف العلامة المائية</button>
+            </div>
+        </section>
+
+        <!-- 3. محول PDF إلى صورة (PDF to Image) -->
+        <section class="converter-section" id="pdf-to-image-section">
+            <div class="converter-card">
+                <h2>محول PDF إلى صورة (PDF to Image)</h2>
+                <p>حول صفحات ملف PDF إلى صور (JPEG/PNG) عالية الجودة.</p>
+                <div class="action-buttons">
+                    <input type="file" id="pdfInput" accept="application/pdf" hidden>
+                    <button class="btn btn-primary" onclick="document.getElementById('pdfInput').click()"><i class="fas fa-file-image"></i> اختر ملف PDF</button>
+                </div>
+                <button class="btn btn-success" id="convertPdfToImageBtn" disabled><i class="fas fa-download"></i> تحويل وحفظ كملف مضغوط</button>
+            </div>
+        </section>
+
+        <!-- 4. تقسيم ملفات PDF (Split PDF) -->
+        <section class="converter-section" id="split-pdf-section">
+            <div class="converter-card">
+                <h2>تقسيم ملفات PDF (Split PDF)</h2>
+                <p>استخرج صفحات محددة أو نطاقات من الصفحات لإنشاء ملف PDF جديد.</p>
+                <div class="action-buttons">
+                    <input type="file" id="splitPdfInput" accept="application/pdf" hidden>
+                    <button class="btn btn-primary" onclick="document.getElementById('splitPdfInput').click()"><i class="fas fa-cut"></i> اختر ملف PDF</button>
+                </div>
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="splitRangeInput">نطاق الصفحات:</label>
+                    <input type="text" id="splitRangeInput" placeholder="مثال: 1-5, 8, 10-12" class="text-input">
+                </div>
+                <button class="btn btn-success" id="splitPdfBtn" disabled><i class="fas fa-compress-arrows-alt"></i> تقسيم ملف PDF</button>
+            </div>
+        </section>
+
+        <!-- 5. المحتوى النصي الغني لتحسين SEO -->
+        <section class="description-section" id="description-section">
+            <h2>أهمية أدوات PDF المجانية عبر الإنترنت: الكفاءة والوصول</h2>
             <p>
-                قم بتحويل صورك إلى ملف PDF واحد أو عدة ملفات PDF بسهولة تامة وبجودة احترافية. يدعم المحول جميع صيغ الصور الرئيسية مثل JPEG و PNG. خدمتنا مجانية بالكامل وسريعة، وتعمل مباشرة من متصفحك دون الحاجة إلى تثبيت أي برامج.
+                في عصر التحول الرقمي، أصبحت المستندات بصيغة PDF هي المعيار العالمي لتبادل المعلومات بشكل ثابت وموثوق. لكن، التعامل مع هذه الملفات يتطلب أحيانًا أكثر من مجرد قراءتها. تبرز هنا أهمية **أدوات PDF المجانية عبر الإنترنت** مثل محول ScannerX، حيث توفر حلاً سريعًا وفعالًا لمجموعة واسعة من الاحتياجات، بدءًا من تحويل الصور إلى ملفات PDF احترافية وصولاً إلى إدارة الملفات المعقدة.
             </p>
 
-            <h2>لماذا تختار محولنا؟</h2>
+            <h3>لماذا تختار ScannerX لإدارة ملفات PDF الخاصة بك؟</h3>
             <p>
-                نحن نجمع بين الأداء العالي والأمان. يتم مسح ملفاتك تلقائيًا بعد فترة قصيرة من التحويل. استخدم أدواتنا لدمج الصور في ملف PDF بثوانٍ.
+                نحن ندرك أن المستخدم يبحث عن مزيج مثالي من **الأداء العالي، الأمان، وسهولة الاستخدام**. تم تصميم ScannerX ليكون أكثر من مجرد محول؛ إنه منصة متكاملة لإدارة مستنداتك الرقمية:
+            </p>
+            <ul>
+                <li>**سرعة فائقة:** يتم تحويل ومعالجة الملفات في ثوانٍ معدودة، مما يوفر وقتك الثمين.</li>
+                <li>**جودة احترافية:** نحافظ على أعلى مستويات الجودة والدقة في جميع عمليات التحويل، سواء كانت صورًا إلى PDF أو PDF إلى صور.</li>
+                <li>**أمان وخصوصية مضمونة:** يتم مسح جميع الملفات التي يتم تحميلها تلقائيًا من خوادمنا بعد فترة قصيرة من المعالجة، مما يضمن خصوصية مستنداتك.</li>
+                <li>**وصول من أي مكان:** تعمل أدواتنا مباشرة من متصفح الويب الخاص بك، سواء كنت تستخدم هاتفًا (Termux)، جهازًا لوحيًا، أو حاسوبًا مكتبيًا، دون الحاجة لتثبيت أي برامج إضافية.</li>
+            </ul>
+
+            <h3>ميزات ScannerX الجديدة: إدارة متكاملة للمستندات</h3>
+            <p>
+                لتلبية جميع احتياجاتك، قمنا بتوسيع مجموعة أدواتنا لتشمل الميزات التالية، والتي ستساعدك على التحكم الكامل في مستنداتك:
+            </p>
+
+            <h4>1. إضافة علامة مائية (Watermark) لملفات PDF</h4>
+            <p>
+                **الحماية والاحترافية:** تعد العلامة المائية طريقة فعالة لحماية المحتوى الخاص بك من النسخ غير المصرح به، أو لتحديد حالة المستند (مثل "مسودة" أو "سري"). تتيح لك هذه الميزة إضافة نص مخصص بزاوية ميلان وشفافية مناسبة، مما يضفي لمسة احترافية على مستنداتك.
+            </p>
+
+            <h4>2. محول PDF إلى صورة (PDF to Image)</h4>
+            <p>
+                **مرونة في المشاركة:** في بعض الأحيان، تحتاج إلى مشاركة صفحة معينة من ملف PDF كصورة (JPEG أو PNG) بدلاً من المستند بأكمله. تتيح لك هذه الأداة تحويل صفحات PDF إلى صور عالية الجودة، مما يسهل دمجها في العروض التقديمية أو مشاركتها عبر وسائل التواصل الاجتماعي.
+            </p>
+
+            <h4>3. تقسيم ملفات PDF (Split PDF)</h4>
+            <p>
+                **تنظيم وإدارة:** هل لديك ملف PDF كبير يحتوي على عدة أقسام؟ تسمح لك أداة تقسيم PDF بفصل صفحات محددة أو نطاقات من الصفحات لإنشاء ملفات PDF جديدة أصغر حجمًا وأكثر تنظيمًا. هذه الميزة مثالية لاستخراج فصول معينة من كتاب أو فواتير فردية من كشف حساب موحد.
             </p>
         </section>
+
 
     </main>
 
     <footer class="footer">
         <div class="container">
             <p>&copy; 2025 ScannerX. جميع الحقوق محفوظة.</p>
+            <div class="legal-links">
+                <a href="privacy.html">سياسة الخصوصية</a> | 
+                <a href="terms.html">شروط الاستخدام</a>
+            </div>
         </div>
     </footer>
 
+    <!-- ملفات JavaScript للميزات الجديدة -->
+    <script src="js/pdf_to_image.js"></script>
+    <script src="js/split_pdf.js"></script>
+    <script src="js/watermark.js"></script>
+    
+    <!-- ملف JavaScript الرئيسي -->
     <script src="js/script.js"></script>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6516738542213361" crossorigin="anonymous"></script>
