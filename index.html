@@ -16,11 +16,12 @@
 
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-    <!-- مكتبات PDF المطلوبة -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.js"></script>
 
     <script type="text/javascript">
         (function(c,l,a,r,i,t,y){
@@ -29,7 +30,7 @@
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "ts9cjpmxup");
     </script>
-    <!-- Schema Markup for SEO -->
+    
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -93,19 +94,31 @@
     <header class="header">
         <div class="container">
             <h1>ScannerX - أدوات PDF متكاملة</h1>
-            <nav>
-                <a href="#converter-section">صورة إلى PDF</a>
-                <a href="#watermark-section">علامة مائية</a>
-                <a href="#pdf-to-image-section">PDF إلى صورة</a>
-                <a href="#split-pdf-section">تقسيم PDF</a>
-                <a href="#description-section">لماذا نحن؟</a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="about.html">عن الموقع</a></li>
+                    <li><a href="privacy.html">سياسة الخصوصية</a></li>
+                    <li><a href="terms.html">الشروط والأحكام</a></li>
+                    <li><a href="contact.html">اتصل بنا</a></li>
+                </ul>
             </nav>
         </div>
     </header>
 
     <main class="container">
 
-        <!-- 1. محول الصور إلى PDF (القسم الأصلي) -->
+        <nav class="tool-nav">
+            <div class="container">
+                <ul>
+                    <li><a href="#converter-section">صورة إلى PDF</a></li>
+                    <li><a href="#watermark-section">علامة مائية</a></li>
+                    <li><a href="#pdf-to-image-section">PDF إلى صورة</a></li>
+                    <li><a href="#split-pdf-section">تقسيم PDF</a></li>
+                </ul>
+            </div>
+        </nav>
+
         <section class="converter-section" id="converter-section">
             <div class="converter-card">
                 <h2>صور (JPEG/PNG) إلى ملف PDF</h2>
@@ -146,11 +159,10 @@
             </div>
         </section>
 
-        <!-- 2. إضافة علامة مائية (Watermark) -->
         <section class="converter-section" id="watermark-section">
             <div class="converter-card">
                 <h2>إضافة علامة مائية (Watermark) لملف PDF</h2>
-                <p>أضف نصًا مخصصًا كعلامة مائية لحماية مستنداتك.</p>
+                <p>أضف نصًا مخصصًا كعلامة مائية لحماية مستنداتك. (يتطلب مكتبة PDF-LIB)</p>
                 <div class="action-buttons">
                     <input type="file" id="watermarkPdfInput" accept="application/pdf" hidden>
                     <button class="btn btn-primary" onclick="document.getElementById('watermarkPdfInput').click()"><i class="fas fa-file-upload"></i> اختر ملف PDF</button>
@@ -163,7 +175,6 @@
             </div>
         </section>
 
-        <!-- 3. محول PDF إلى صورة (PDF to Image) -->
         <section class="converter-section" id="pdf-to-image-section">
             <div class="converter-card">
                 <h2>محول PDF إلى صورة (PDF to Image)</h2>
@@ -176,11 +187,10 @@
             </div>
         </section>
 
-        <!-- 4. تقسيم ملفات PDF (Split PDF) -->
         <section class="converter-section" id="split-pdf-section">
             <div class="converter-card">
                 <h2>تقسيم ملفات PDF (Split PDF)</h2>
-                <p>استخرج صفحات محددة أو نطاقات من الصفحات لإنشاء ملف PDF جديد.</p>
+                <p>استخرج صفحات محددة أو نطاقات من الصفحات لإنشاء ملف PDF جديد. (يتطلب مكتبة PDF-LIB)</p>
                 <div class="action-buttons">
                     <input type="file" id="splitPdfInput" accept="application/pdf" hidden>
                     <button class="btn btn-primary" onclick="document.getElementById('splitPdfInput').click()"><i class="fas fa-cut"></i> اختر ملف PDF</button>
@@ -193,22 +203,21 @@
             </div>
         </section>
 
-        <!-- 5. المحتوى النصي الغني لتحسين SEO -->
         <section class="description-section" id="description-section">
             <h2>أهمية أدوات PDF المجانية عبر الإنترنت: الكفاءة والوصول</h2>
             <p>
-                في عصر التحول الرقمي، أصبحت المستندات بصيغة PDF هي المعيار العالمي لتبادل المعلومات بشكل ثابت وموثوق. لكن، التعامل مع هذه الملفات يتطلب أحيانًا أكثر من مجرد قراءتها. تبرز هنا أهمية **أدوات PDF المجانية عبر الإنترنت** مثل محول ScannerX، حيث توفر حلاً سريعًا وفعالًا لمجموعة واسعة من الاحتياجات، بدءًا من تحويل الصور إلى ملفات PDF احترافية وصولاً إلى إدارة الملفات المعقدة.
+                في عصر التحول الرقمي، أصبحت المستندات بصيغة PDF هي المعيار العالمي لتبادل المعلومات بشكل ثابت وموثوق. لكن، التعامل مع هذه الملفات يتطلب أحيانًا أكثر من مجرد قراءتها. تبرز هنا أهمية <strong>أدوات PDF المجانية عبر الإنترنت</strong> مثل محول ScannerX، حيث توفر حلاً سريعًا وفعالًا لمجموعة واسعة من الاحتياجات، بدءًا من تحويل الصور إلى ملفات PDF احترافية وصولاً إلى إدارة الملفات المعقدة.
             </p>
 
             <h3>لماذا تختار ScannerX لإدارة ملفات PDF الخاصة بك؟</h3>
             <p>
-                نحن ندرك أن المستخدم يبحث عن مزيج مثالي من **الأداء العالي، الأمان، وسهولة الاستخدام**. تم تصميم ScannerX ليكون أكثر من مجرد محول؛ إنه منصة متكاملة لإدارة مستنداتك الرقمية:
+                نحن ندرك أن المستخدم يبحث عن مزيج مثالي من <strong>الأداء العالي، الأمان، وسهولة الاستخدام</strong>. تم تصميم ScannerX ليكون أكثر من مجرد محول؛ إنه منصة متكاملة لإدارة مستنداتك الرقمية:
             </p>
             <ul>
-                <li>**سرعة فائقة:** يتم تحويل ومعالجة الملفات في ثوانٍ معدودة، مما يوفر وقتك الثمين.</li>
-                <li>**جودة احترافية:** نحافظ على أعلى مستويات الجودة والدقة في جميع عمليات التحويل، سواء كانت صورًا إلى PDF أو PDF إلى صور.</li>
-                <li>**أمان وخصوصية مضمونة:** يتم مسح جميع الملفات التي يتم تحميلها تلقائيًا من خوادمنا بعد فترة قصيرة من المعالجة، مما يضمن خصوصية مستنداتك.</li>
-                <li>**وصول من أي مكان:** تعمل أدواتنا مباشرة من متصفح الويب الخاص بك، سواء كنت تستخدم هاتفًا (Termux)، جهازًا لوحيًا، أو حاسوبًا مكتبيًا، دون الحاجة لتثبيت أي برامج إضافية.</li>
+                <li><strong>سرعة فائقة:</strong> يتم تحويل ومعالجة الملفات في ثوانٍ معدودة، مما يوفر وقتك الثمين.</li>
+                <li><strong>جودة احترافية:</strong> نحافظ على أعلى مستويات الجودة والدقة في جميع عمليات التحويل، سواء كانت صورًا إلى PDF أو PDF إلى صور.</li>
+                <li><strong>أمان وخصوصية مضمونة:</strong> يتم مسح جميع الملفات التي يتم تحميلها تلقائيًا من خوادمنا بعد فترة قصيرة من المعالجة، مما يضمن خصوصية مستنداتك.</li>
+                <li><strong>وصول من أي مكان:</strong> تعمل أدواتنا مباشرة من متصفح الويب الخاص بك، سواء كنت تستخدم هاتفًا (Termux)، جهازًا لوحيًا، أو حاسوبًا مكتبيًا، دون الحاجة لتثبيت أي برامج إضافية.</li>
             </ul>
 
             <h3>ميزات ScannerX الجديدة: إدارة متكاملة للمستندات</h3>
@@ -218,17 +227,17 @@
 
             <h4>1. إضافة علامة مائية (Watermark) لملفات PDF</h4>
             <p>
-                **الحماية والاحترافية:** تعد العلامة المائية طريقة فعالة لحماية المحتوى الخاص بك من النسخ غير المصرح به، أو لتحديد حالة المستند (مثل "مسودة" أو "سري"). تتيح لك هذه الميزة إضافة نص مخصص بزاوية ميلان وشفافية مناسبة، مما يضفي لمسة احترافية على مستنداتك.
+                <strong>الحماية والاحترافية:</strong> تعد العلامة المائية طريقة فعالة لحماية المحتوى الخاص بك من النسخ غير المصرح به، أو لتحديد حالة المستند (مثل "مسودة" أو "سري"). تتيح لك هذه الميزة إضافة نص مخصص بزاوية ميلان وشفافية مناسبة، مما يضفي لمسة احترافية على مستنداتك.
             </p>
 
             <h4>2. محول PDF إلى صورة (PDF to Image)</h4>
             <p>
-                **مرونة في المشاركة:** في بعض الأحيان، تحتاج إلى مشاركة صفحة معينة من ملف PDF كصورة (JPEG أو PNG) بدلاً من المستند بأكمله. تتيح لك هذه الأداة تحويل صفحات PDF إلى صور عالية الجودة، مما يسهل دمجها في العروض التقديمية أو مشاركتها عبر وسائل التواصل الاجتماعي.
+                <strong>مرونة في المشاركة:</strong> في بعض الأحيان، تحتاج إلى مشاركة صفحة معينة من ملف PDF كصورة (JPEG أو PNG) بدلاً من المستند بأكمله. تتيح لك هذه الأداة تحويل صفحات PDF إلى صور عالية الجودة، مما يسهل دمجها في العروض التقديمية أو مشاركتها عبر وسائل التواصل الاجتماعي.
             </p>
 
             <h4>3. تقسيم ملفات PDF (Split PDF)</h4>
             <p>
-                **تنظيم وإدارة:** هل لديك ملف PDF كبير يحتوي على عدة أقسام؟ تسمح لك أداة تقسيم PDF بفصل صفحات محددة أو نطاقات من الصفحات لإنشاء ملفات PDF جديدة أصغر حجمًا وأكثر تنظيمًا. هذه الميزة مثالية لاستخراج فصول معينة من كتاب أو فواتير فردية من كشف حساب موحد.
+                <strong>تنظيم وإدارة:</strong> هل لديك ملف PDF كبير يحتوي على عدة أقسام؟ تسمح لك أداة تقسيم PDF بفصل صفحات محددة أو نطاقات من الصفحات لإنشاء ملفات PDF جديدة أصغر حجمًا وأكثر تنظيمًا. هذه الميزة مثالية لاستخراج فصول معينة من كتاب أو فواتير فردية من كشف حساب موحد.
             </p>
         </section>
 
@@ -239,18 +248,16 @@
         <div class="container">
             <p>&copy; 2025 ScannerX. جميع الحقوق محفوظة.</p>
             <div class="legal-links">
-                <a href="privacy.html">سياسة الخصوصية</a> | 
+                <a href="privacy.html">سياسة الخصوصية</a> |
                 <a href="terms.html">شروط الاستخدام</a>
             </div>
         </div>
     </footer>
 
-    <!-- ملفات JavaScript للميزات الجديدة -->
     <script src="js/pdf_to_image.js"></script>
     <script src="js/split_pdf.js"></script>
     <script src="js/watermark.js"></script>
-    
-    <!-- ملف JavaScript الرئيسي -->
+
     <script src="js/script.js"></script>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6516738542213361" crossorigin="anonymous"></script>
