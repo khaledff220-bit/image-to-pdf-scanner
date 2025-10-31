@@ -1,13 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // نحدد رابط خط عربي مفتوح المصدر (مثل Noto Sans Arabic)
+    // لاحظ: يجب أن يكون الخط متوفراً عبر رابط HTTPS
+    const ARABIC_FONT_URL = 'https://fonts.gstatic.com/s/notosansarabic/v20/or20Q6suT_gRSD8wVlXQ-w.ttf';
+    
     const watermarkPdfInput = document.getElementById('watermarkPdfInput');
     const addWatermarkBtn = document.getElementById('addWatermarkBtn');
     const watermarkTextInput = document.getElementById('watermarkTextInput');
     let uploadedPdfBytes = null;
+    let arabicFontBytes = null;
 
-    // تمكين زر العلامة المائية عند اختيار الملف وإدخال النص
+    // تحميل الخط العربي مرة واحدة عند تحميل الصفحة
+    async function loadArabicFont() {
+        try {
+            const response = await fetch(ARABIC_FONT_URL);
+            arabicFontBytes = await response.arrayBuffer();
+            console.log("Arabic font loaded successfully.");
+        } catch (error) {
+            console.error("Failed to load Arabic font:", error);
+            alert("فشل في تحميل الخط العربي اللازم للعلامة المائية.");
+        }
+    }
+
+    loadArabicFont();
+
     const checkWatermarkConditions = () => {
         const text = watermarkTextInput.value.trim();
-        addWatermarkBtn.disabled = !(watermarkPdfInput.files.length > 0 && text.length > 0);
+        addWatermarkBtn.disabled = !(watermarkPdfInput.files.length > 0 && text.length > 0 && arabicFontBytes !== null);
     };
 
     watermarkPdfInput.addEventListener('change', (e) => {
@@ -23,9 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     watermarkTextInput.addEventListener('input', checkWatermarkConditions);
 
-
     addWatermarkBtn.addEventListener('click', async () => {
-        if (!uploadedPdfBytes) return;
+        if (!uploadedPdfBytes || !arabicFontBytes) return;
 
         const watermarkText = watermarkTextInput.value.trim();
         if (watermarkText.length === 0) return;
@@ -35,16 +52,18 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingBar.style.display = 'block';
 
         try {
-            // يتطلب مكتبة PDFLib (تم تضمينها في index.html)
             const pdfDoc = await PDFLib.PDFDocument.load(uploadedPdfBytes);
             const { width, height } = pdfDoc.getPage(0).getSize();
             
-            // تهيئة الخط (استخدام خط مدمج بسيط)
-            const font = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
-            const fontSize = 75;
-            const textWidth = font.widthOfTextAtSize(watermarkText, fontSize);
+            // تضمين الخط العربي المُحمَّل
+            const customFont = await pdfDoc.embedFont(arabicFontBytes, { subset: true });
             
-            // حساب زاوية الميلان (45 درجة) والشفافية
+            const fontSize = 75;
+            // PDF-LIB لا تدعم RTL مباشرة، لذلك نستخدم طريقة عكس النص
+            // هذه الطريقة لا تحل مشكلة التشكيل/الربط لكنها أفضل حل دون مكتبة إضافية
+            const reversedText = watermarkText.split('').reverse().join(''); 
+            
+            const textWidth = customFont.widthOfTextAtSize(watermarkText, fontSize);
             const rotationAngle = PDFLib.degrees(-45);
             const opacity = 0.2; 
             
@@ -61,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     x: x,
                     y: y,
                     size: fontSize,
-                    font: font,
+                    font: customFont,
                     color: PDFLib.rgb(0.5, 0.5, 0.5), // لون رمادي
                     rotate: rotationAngle,
                     opacity: opacity,
@@ -81,7 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error("Error during adding watermark:", error);
-            alert("حدث خطأ أثناء إضافة العلامة المائية. تأكد من أن الملف سليم.");
+            // إظهار رسالة الخطأ الأعمق للمطور
+            alert("حدث خطأ أثناء إضافة العلامة المائية. السبب: " + error.message);
         } finally {
             loadingBar.style.display = 'none';
             loadingBar.style.width = '0%';
