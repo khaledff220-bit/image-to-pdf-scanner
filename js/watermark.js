@@ -1,110 +1,93 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // نحدد رابط خط عربي مفتوح المصدر (مثل Noto Sans Arabic)
-    // لاحظ: يجب أن يكون الخط متوفراً عبر رابط HTTPS
-    const ARABIC_FONT_URL = 'https://fonts.gstatic.com/s/notosansarabic/v20/or20Q6suT_gRSD8wVlXQ-w.ttf';
-    
-    const watermarkPdfInput = document.getElementById('watermarkPdfInput');
-    const addWatermarkBtn = document.getElementById('addWatermarkBtn');
-    const watermarkTextInput = document.getElementById('watermarkTextInput');
-    let uploadedPdfBytes = null;
-    let arabicFontBytes = null;
+const addWatermarkBtn = document.getElementById('addWatermarkBtn');
+const watermarkPdfInput = document.getElementById('watermarkPdfInput');
+const watermarkTextInput = document.getElementById('watermarkTextInput');
 
-    // تحميل الخط العربي مرة واحدة عند تحميل الصفحة
-    async function loadArabicFont() {
-        try {
-            const response = await fetch(ARABIC_FONT_URL);
-            arabicFontBytes = await response.arrayBuffer();
-            console.log("Arabic font loaded successfully.");
-        } catch (error) {
-            console.error("Failed to load Arabic font:", error);
-            alert("فشل في تحميل الخط العربي اللازم للعلامة المائية.");
-        }
-    }
-
-    loadArabicFont();
-
-    const checkWatermarkConditions = () => {
-        const text = watermarkTextInput.value.trim();
-        addWatermarkBtn.disabled = !(watermarkPdfInput.files.length > 0 && text.length > 0 && arabicFontBytes !== null);
-    };
-
-    watermarkPdfInput.addEventListener('change', (e) => {
-        checkWatermarkConditions();
-        if (e.target.files.length > 0) {
-            const fileReader = new FileReader();
-            fileReader.onload = (ev) => {
-                uploadedPdfBytes = ev.target.result;
-            };
-            fileReader.readAsArrayBuffer(e.target.files[0]);
-        }
-    });
-
-    watermarkTextInput.addEventListener('input', checkWatermarkConditions);
-
-    addWatermarkBtn.addEventListener('click', async () => {
-        if (!uploadedPdfBytes || !arabicFontBytes) return;
-
-        const watermarkText = watermarkTextInput.value.trim();
-        if (watermarkText.length === 0) return;
-
-        const loadingBar = document.getElementById('loadingBar');
-        loadingBar.style.width = '20%';
-        loadingBar.style.display = 'block';
-
-        try {
-            const pdfDoc = await PDFLib.PDFDocument.load(uploadedPdfBytes);
-            const { width, height } = pdfDoc.getPage(0).getSize();
-            
-            // تضمين الخط العربي المُحمَّل
-            const customFont = await pdfDoc.embedFont(arabicFontBytes, { subset: true });
-            
-            const fontSize = 75;
-            // PDF-LIB لا تدعم RTL مباشرة، لذلك نستخدم طريقة عكس النص
-            // هذه الطريقة لا تحل مشكلة التشكيل/الربط لكنها أفضل حل دون مكتبة إضافية
-            const reversedText = watermarkText.split('').reverse().join(''); 
-            
-            const textWidth = customFont.widthOfTextAtSize(watermarkText, fontSize);
-            const rotationAngle = PDFLib.degrees(-45);
-            const opacity = 0.2; 
-            
-            const pages = pdfDoc.getPages();
-            
-            for (let i = 0; i < pages.length; i++) {
-                const page = pages[i];
-                
-                // حساب مكان وضع العلامة المائية في المنتصف مع ميلان
-                const x = (width / 2) - (textWidth / 2);
-                const y = (height / 2) - (fontSize / 2); 
-
-                page.drawText(watermarkText, {
-                    x: x,
-                    y: y,
-                    size: fontSize,
-                    font: customFont,
-                    color: PDFLib.rgb(0.5, 0.5, 0.5), // لون رمادي
-                    rotate: rotationAngle,
-                    opacity: opacity,
-                });
-
-                loadingBar.style.width = `${20 + (i / pages.length) * 70}%`; 
-            }
-
-            const pdfBytes = await pdfDoc.save();
-            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-
-            const originalFileName = watermarkPdfInput.files[0].name.replace('.pdf', '');
-            saveAs(blob, `${originalFileName}_watermarked.pdf`);
-            
-            loadingBar.style.width = '100%';
-            alert("تم إضافة العلامة المائية بنجاح!");
-
-        } catch (error) {
-            console.error("Error during adding watermark:", error);
-            // إظهار رسالة الخطأ الأعمق للمطور
-            alert("حدث خطأ أثناء إضافة العلامة المائية. السبب: " + error.message);
-        } finally {
-            loadingBar.style.display = 'none';
-            loadingBar.style.width = '0%';
-        }
-    });
+watermarkPdfInput.addEventListener('change', () => {
+    addWatermarkBtn.disabled = !watermarkPdfInput.files.length || watermarkTextInput.value.trim() === '';
 });
+
+watermarkTextInput.addEventListener('input', () => {
+    addWatermarkBtn.disabled = !watermarkPdfInput.files.length || watermarkTextInput.value.trim() === '';
+});
+
+addWatermarkBtn.addEventListener('click', async () => {
+    const file = watermarkPdfInput.files[0];
+    const watermarkText = watermarkTextInput.value.trim();
+
+    if (!file || !watermarkText) return;
+
+    // Show loading bar
+    showLoading();
+
+    try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+
+        const arabicFont = await loadArabicFont(pdfDoc);
+
+        const pages = pdfDoc.getPages();
+        const fontSize = 70;
+        const opacity = 0.3;
+
+        for (const page of pages) {
+            const { width, height } = page.getSize();
+            const textWidth = arabicFont.widthOfTextAtSize(watermarkText, fontSize);
+            const textHeight = arabicFont.heightAtSize(fontSize);
+
+            // Calculate center position
+            const centerX = width / 2 - textWidth / 2;
+            const centerY = height / 2 + textHeight / 2;
+
+            page.drawText(watermarkText, {
+                x: centerX,
+                y: centerY,
+                size: fontSize,
+                font: arabicFont,
+                color: PDFLib.rgb(0.5, 0.5, 0.5), // Grey color
+                opacity: opacity,
+                rotate: PDFLib.degrees(-45), // Rotate 45 degrees for better watermark effect
+            });
+        }
+
+        const pdfBytes = await pdfDoc.save();
+        downloadPDF(pdfBytes, 'watermarked_' + file.name);
+
+    } catch (error) {
+        console.error('Error adding watermark:', error);
+        alert(`حدث خطأ أثناء إضافة العلامة المائية. السبب: ${error.message}`);
+    } finally {
+        // Hide loading bar
+        hideLoading();
+    }
+});
+
+// دالة تحميل الخط العربي (التعديل الرئيسي هنا)
+async function loadArabicFont(pdfDoc) {
+    // خطوة حاسمة: ضمان تسجيل fontkit قبل محاولة استخدام الخطوط المخصصة
+    if (typeof PDFLib !== 'undefined' && typeof fontkit !== 'undefined') {
+        PDFLib.PDFDocument.registerFontkit(fontkit);
+        console.log("Fontkit registered locally in watermark.js.");
+    }
+    
+    // تحميل خط يدعم اللغة العربية (هذا ملف الخط الذي يجب أن يكون موجوداً)
+    const fontUrl = 'assets/fonts/Amiri-Regular.ttf';
+    
+    // تأكد من وجود ملف الخط في المسار: assets/fonts/Amiri-Regular.ttf
+    // إذا لم يكن موجودًا، سيظهر خطأ 404
+    const fontBytes = await fetch(fontUrl).then(res => res.arrayBuffer());
+    
+    return pdfDoc.embedFont(fontBytes);
+}
+
+
+function downloadPDF(pdfBytes, fileName) {
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
