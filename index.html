@@ -2,34 +2,39 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="msvalidate.01" content="EFC61E5D106220023439CAF98B06427F" />
-    <title>ScannerX: محول صور إلى PDF وأدوات PDF متكاملة مجانية</title>
-
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="images/icon-192x192.png">
-
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
     
     <script src="https://unpkg.com/fontkit@1.1.1/dist/fontkit.umd.js"></script>
-    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.js" onload="PDFLib.PDFDocument.registerFontkit(fontkit); console.log('Fontkit registered on load.')"></script>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.js"></script>
 
     </head>
 <body>
 
+    <footer class="footer">
+        </footer>
+
     <script src="js/pdf_to_image.js"></script>
     <script src="js/split_pdf.js"></script>
     <script src="js/watermark.js"></script>
-
     <script src="js/script.js"></script>
-    
+
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6516738542213361" crossorigin="anonymous"></script>
     
-    </body>
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                if (typeof PDFLib !== 'undefined' && typeof fontkit !== 'undefined') {
+                    PDFLib.PDFDocument.registerFontkit(fontkit);
+                    console.log("Fontkit registered with PDFLib via timeout.");
+                } else {
+                    console.error("PDFLib or fontkit not loaded for registration.");
+                }
+            }, 500); // تأخير نصف ثانية
+        };
+    </script>
+
+</body>
 </html>
