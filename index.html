@@ -7,7 +7,6 @@
     <meta name="description" content="تحويل الصور إلى PDF بجودة عالية مع إضافة علامة مائية نصية أو صورية. أداة مجانية 100%، سريعة وآمنة. دعم اللغة العربية والإنجليزية.">
     <meta name="keywords" content="تحويل صورة إلى pdf, إضافة علامة مائية, pdf, صورة, محول, أداة مجانية, تحويل صور, علامة مائية نصية">
     
-    <!-- تحسينات SEO -->
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://image-to-pdf-scanner.vercel.app/">
     <meta property="og:title" content="تحويل الصور إلى PDF مع علامة مائية">
@@ -15,7 +14,6 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://image-to-pdf-scanner.vercel.app/">
     
-    <!-- Structured Data -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -127,7 +125,8 @@
 
         .preview-container {
             margin-top: 20px;
-            display: none;
+            /* يتم إظهارها بواسطة JavaScript لاحقاً */
+             display: none; 
         }
 
         .preview-image {
@@ -294,19 +293,17 @@
             <p>أداة مجانية وسريعة لتحويل الصور إلى PDF مع إضافة علامات مائية نصية وصورية</p>
         </header>
 
-        <!-- إعلانات Adsense -->
         <div class="ads-container">
             <div class="ad-unit">
-                <!-- مكان إعلان Adsense -->
                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                 <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                     data-ad-slot="XXXXXXXXXX"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
+                      style="display:block"
+                      data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                      data-ad-slot="XXXXXXXXXX"
+                      data-ad-format="auto"
+                      data-full-width-responsive="true"></ins>
                 <script>
-                     (adsbygoogle = window.adsbygoogle || []).push({});
+                      (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
             </div>
         </div>
@@ -429,19 +426,17 @@
             </div>
         </div>
 
-        <!-- إعلانات Adsense إضافية -->
         <div class="ads-container">
             <div class="ad-unit">
-                <!-- مكان إعلان Adsense -->
                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                 <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-format="fluid"
-                     data-ad-layout-key="-gw-3+1f-3d+2z"
-                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                     data-ad-slot="XXXXXXXXXX"></ins>
+                      style="display:block"
+                      data-ad-format="fluid"
+                      data-ad-layout-key="-gw-3+1f-3d+2z"
+                      data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                      data-ad-slot="XXXXXXXXXX"></ins>
                 <script>
-                     (adsbygoogle = window.adsbygoogle || []).push({});
+                      (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
             </div>
         </div>
@@ -452,211 +447,5 @@
         </footer>
     </div>
 
-    <!-- مكتبات JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
-    <script>
-        // كود JavaScript المحدث
-        document.addEventListener('DOMContentLoaded', function() {
-            const fileInput = document.getElementById('fileInput');
-            const uploadArea = document.getElementById('uploadArea');
-            const previewContainer = document.getElementById('previewContainer');
-            const imagePreviews = document.getElementById('imagePreviews');
-            const convertBtn = document.getElementById('convertBtn');
-            const resetBtn = document.getElementById('resetBtn');
-            const loading = document.getElementById('loading');
-            const watermarkType = document.getElementById('watermarkType');
-            const textOptions = document.getElementById('textOptions');
-            const imageOptions = document.getElementById('imageOptions');
-            const watermarkPreview = document.getElementById('watermarkPreview');
-
-            let selectedFiles = [];
-
-            // أحداث الرفع
-            uploadArea.addEventListener('click', () => fileInput.click());
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#667eea';
-                uploadArea.style.background = '#edf2f7';
-            });
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.style.borderColor = '#cbd5e0';
-                uploadArea.style.background = '#f7fafc';
-            });
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                handleFiles(e.dataTransfer.files);
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                handleFiles(e.target.files);
-            });
-
-            // تبديل نوع العلامة المائية
-            watermarkType.addEventListener('change', function() {
-                if (this.value === 'text') {
-                    textOptions.style.display = 'block';
-                    imageOptions.style.display = 'none';
-                } else {
-                    textOptions.style.display = 'none';
-                    imageOptions.style.display = 'block';
-                }
-                updateWatermarkPreview();
-            });
-
-            // تحديث معاينة العلامة المائية
-            function updateWatermarkPreview() {
-                const type = watermarkType.value;
-                const opacity = document.getElementById('opacity').value;
-                
-                if (type === 'text') {
-                    const text = document.getElementById('watermarkText').value;
-                    const color = document.getElementById('textColor').value;
-                    const fontSize = document.getElementById('fontSize').value;
-                    
-                    watermarkPreview.innerHTML = `
-                        <div style="
-                            color: ${color};
-                            font-size: ${fontSize}px;
-                            opacity: ${opacity};
-                            font-weight: bold;
-                        ">${text}</div>
-                    `;
-                } else {
-                    watermarkPreview.innerHTML = `
-                        <div style="opacity: ${opacity};">
-                            <p>سيتم عرض معاينة الصورة هنا بعد الرفع</p>
-                        </div>
-                    `;
-                }
-            }
-
-            // تحديث المعاينة عند تغيير الإعدادات
-            document.querySelectorAll('#watermarkText, #textColor, #fontSize, #opacity').forEach(element => {
-                element.addEventListener('input', updateWatermarkPreview);
-            });
-
-            // معالجة الملفات المرفوعة
-            function handleFiles(files) {
-                selectedFiles = Array.from(files).slice(0, 10); // حد أقصى 10 ملفات
-                
-                if (selectedFiles.length > 0) {
-                    previewContainer.style.display = 'block';
-                    imagePreviews.innerHTML = '';
-                    
-                    selectedFiles.forEach((file, index) => {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const img = document.createElement('img');
-                            img.src = e.target.result;
-                            img.className = 'preview-image';
-                            img.style.margin = '5px';
-                            imagePreviews.appendChild(img);
-                        };
-                        reader.readAsDataURL(file);
-                    });
-                    
-                    convertBtn.disabled = false;
-                }
-            }
-
-            // تحويل إلى PDF
-            convertBtn.addEventListener('click', async function() {
-                if (selectedFiles.length === 0) return;
-                
-                loading.style.display = 'block';
-                convertBtn.disabled = true;
-
-                try {
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF();
-                    
-                    for (let i = 0; i < selectedFiles.length; i++) {
-                        if (i > 0) pdf.addPage();
-                        
-                        const file = selectedFiles[i];
-                        const img = new Image();
-                        
-                        await new Promise((resolve) => {
-                            img.onload = resolve;
-                            img.src = URL.createObjectURL(file);
-                        });
-
-                        const imgWidth = pdf.internal.pageSize.getWidth();
-                        const imgHeight = (img.height * imgWidth) / img.width;
-                        
-                        pdf.addImage(img, 'JPEG', 0, 0, imgWidth, imgHeight);
-                        
-                        // إضافة العلامة المائية
-                        addWatermarkToPDF(pdf, imgWidth, imgHeight);
-                    }
-                    
-                    pdf.save('document-with-watermark.pdf');
-                    
-                } catch (error) {
-                    console.error('Error generating PDF:', error);
-                    alert('حدث خطأ أثناء إنشاء PDF. يرجى المحاولة مرة أخرى.');
-                } finally {
-                    loading.style.display = 'none';
-                    convertBtn.disabled = false;
-                }
-            });
-
-            // دالة إضافة العلامة المائية
-            function addWatermarkToPDF(pdf, pageWidth, pageHeight) {
-                const type = watermarkType.value;
-                const opacity = parseFloat(document.getElementById('opacity').value);
-                const position = document.getElementById('position').value;
-                
-                pdf.setGState(new pdf.GState({ opacity: opacity }));
-                
-                let x, y;
-                switch (position) {
-                    case 'top-left': x = 20; y = 30; break;
-                    case 'top-right': x = pageWidth - 100; y = 30; break;
-                    case 'bottom-left': x = 20; y = pageHeight - 30; break;
-                    case 'bottom-right': x = pageWidth - 100; y = pageHeight - 30; break;
-                    default: x = pageWidth / 2 - 50; y = pageHeight / 2; break;
-                }
-                
-                if (type === 'text') {
-                    const text = document.getElementById('watermarkText').value;
-                    const color = document.getElementById('textColor').value;
-                    const fontSize = parseInt(document.getElementById('fontSize').value);
-                    
-                    pdf.setFontSize(fontSize);
-                    pdf.setTextColor(color);
-                    pdf.text(text, x, y);
-                } else {
-                    // للعلامات المائية الصورية (يمكن تطويرها لاحقاً)
-                    const text = "Watermark";
-                    pdf.setFontSize(36);
-                    pdf.setTextColor(200, 200, 200);
-                    pdf.text(text, x, y);
-                }
-                
-                pdf.setGState(new pdf.GState({ opacity: 1 }));
-            }
-
-            // إعادة التعيين
-            resetBtn.addEventListener('click', function() {
-                selectedFiles = [];
-                fileInput.value = '';
-                previewContainer.style.display = 'none';
-                imagePreviews.innerHTML = '';
-                convertBtn.disabled = true;
-                document.getElementById('watermarkText').value = 'موقعك الإلكتروني';
-                document.getElementById('textColor').value = '#000000';
-                document.getElementById('fontSize').value = '36';
-                document.getElementById('opacity').value = '0.5';
-                document.getElementById('position').value = 'center';
-                updateWatermarkPreview();
-            });
-
-            // تهيئة المعاينة الأولى
-            updateWatermarkPreview();
-        });
-    </script>
-</body>
+    </body>
 </html>
