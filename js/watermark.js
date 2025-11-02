@@ -1,22 +1,21 @@
-// نحدد رابط خط عربي مفتوح المصدر
+// نحدد رابط خط عربي مفتوح المصدر (خط Noto Sans Arabic)
 const ARABIC_FONT_URL = 'https://fonts.gstatic.com/s/notosansarabic/v20/or20Q6suT_gRSD8wVlXQ-w.ttf';
 
 document.addEventListener('DOMContentLoaded', () => {
     const watermarkPdfInput = document.getElementById('watermarkPdfInput');
     const addWatermarkBtn = document.getElementById('addWatermarkBtn');
     const watermarkTextInput = document.getElementById('watermarkTextInput');
+    const loadingBar = document.getElementById('loadingBar');
+    
     let uploadedPdfBytes = null;
-    let arabicFontBytes = null; // سيتم تحميله عند الحاجة أو عند النقر الأول
+    let arabicFontBytes = null; 
 
-    // دالة تحميل الخط العربي (ستُستدعى فقط عند الحاجة)
+    // دالة تحميل الخط العربي (يتم استدعاؤها في البداية لتحسين الأداء)
     async function loadArabicFont() {
-        if (arabicFontBytes) {
-            return true; // تم التحميل مسبقاً
-        }
+        if (arabicFontBytes) return true;
         try {
             const response = await fetch(ARABIC_FONT_URL);
             arabicFontBytes = await response.arrayBuffer();
-            console.log("Arabic font loaded successfully from external URL.");
             return true;
         } catch (error) {
             console.error("Failed to load Arabic font:", error);
@@ -24,10 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
     }
+    
+    // محاولة التحميل المسبق عند تحميل الصفحة
+    loadArabicFont();
 
     const checkWatermarkConditions = () => {
         const text = watermarkTextInput.value.trim();
-        // لن نقوم بتعطيل الزر بناءً على تحميل الخط، بل سنتحقق عند النقر.
         addWatermarkBtn.disabled = !(watermarkPdfInput.files.length > 0 && text.length > 0);
     };
 
@@ -45,58 +46,58 @@ document.addEventListener('DOMContentLoaded', () => {
     watermarkTextInput.addEventListener('input', checkWatermarkConditions);
 
     addWatermarkBtn.addEventListener('click', async () => {
-        const loadingBar = document.getElementById('loadingBar');
         
         if (!uploadedPdfBytes) return;
 
         const watermarkText = watermarkTextInput.value.trim();
         if (watermarkText.length === 0) return;
 
-        // 1. محاولة تحميل الخط (إذا لم يكن مُحملاً بعد)
         const fontLoaded = await loadArabicFont();
-        if (!fontLoaded) return; // توقف إذا فشل تحميل الخط
+        if (!fontLoaded || !arabicFontBytes) {
+            alert("الخط العربي غير جاهز. يرجى المحاولة مرة أخرى.");
+            return;
+        }
 
-        // إظهار شريط التحميل
         loadingBar.style.width = '20%';
         loadingBar.style.display = 'block';
 
         try {
-            // 2. التحقق مرة أخرى من أن fontkit تم تسجيله في index.html
-            if (typeof PDFLib.PDFDocument.registerFontkit === 'undefined') {
-                 throw new Error("PDFLib is not fully initialized. fontkit registration failed.");
+            // =================================================================
+            // الحل الإجباري: تسجيل fontkit مباشرة هنا قبل الاستخدام
+            // هذا يضمن أن التسجيل يتم في نفس الدورة التنفيذية
+            // =================================================================
+            if (typeof PDFLib !== 'undefined' && typeof fontkit !== 'undefined') {
+                PDFLib.PDFDocument.registerFontkit(fontkit);
+                console.log("Fontkit registered forcibly before embedFont.");
+            } else {
+                 throw new Error("Cannot register fontkit: PDFLib or fontkit object is missing.");
             }
 
             const pdfDoc = await PDFLib.PDFDocument.load(uploadedPdfBytes);
             
-            // 3. تضمين الخط (نحن واثقون الآن من أن fontkit مُسجَّل)
+            // 3. تضمين الخط العربي المُحمَّل (الآن يجب أن ينجح)
             const customFont = await pdfDoc.embedFont(arabicFontBytes, { subset: true });
             
             const fontSize = 75;
-            // حل مشكلة RTL: عكس النص
-            // لا نحتاج لعكس النص هنا. مكتبة pdf-lib تتعامل مع اليونيكود بشكل أفضل
-            // لكن سنبقي على النص الأصلي لترك مهمة embedFont للخط نفسه.
-            
             const pages = pdfDoc.getPages();
             
             for (let i = 0; i < pages.length; i++) {
                 const page = pages[i];
                 const { width, height } = page.getSize();
                 
-                // حساب العرض بعد التضمين
                 const textWidth = customFont.widthOfTextAtSize(watermarkText, fontSize);
                 const rotationAngle = PDFLib.degrees(-45);
                 const opacity = 0.2;
                 
-                // حساب مكان وضع العلامة المائية في المنتصف مع ميلان
                 const x = (width / 2) - (textWidth / 2);
-                const y = (height / 2); // في المنتصف عمودياً
+                const y = (height / 2);
 
                 page.drawText(watermarkText, {
                     x: x,
                     y: y,
                     size: fontSize,
                     font: customFont,
-                    color: PDFLib.rgb(0.5, 0.5, 0.5), // لون رمادي
+                    color: PDFLib.rgb(0.5, 0.5, 0.5),
                     rotate: rotationAngle,
                     opacity: opacity,
                 });
@@ -117,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error during adding watermark:", error);
             alert("حدث خطأ أثناء إضافة العلامة المائية. السبب: " + error.message);
         } finally {
-            // إخفاء شريط التحميل
             loadingBar.style.display = 'none';
             loadingBar.style.width = '0%';
         }
