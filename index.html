@@ -235,3 +235,14 @@
 
 </body>
 </html>
+cat << 'EOF' >> index.html
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(regs) {
+    for(let reg of regs) { reg.unregister(); }
+    caches.keys().then(function(names) { for(let name of names) caches.delete(name); });
+    location.reload(true);
+  });
+}
+</script>
+EOF
